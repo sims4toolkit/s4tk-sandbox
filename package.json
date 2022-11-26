@@ -3,10 +3,19 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "build": "rollup -c",
-    "dev": "rollup -c -w",
-    "start": "sirv public",
-    "check": "svelte-check --tsconfig ./tsconfig.json"
+    "clean": "rm -rf ./public/build",
+    "build": "npm run clean && npm run sass:build && npm run tw:build && rollup -c",
+    "dev": "npm run clean ; concurrently \"npm run sass:watch\" \"npm run tw:watch\" \"rollup -c -w\"",
+    "start": "sirv public --no-clear --port 5000",
+    "serve": "sirv public --no-clear --host",
+    "deploy": "sh ./scripts/deploy.sh",
+    "sass:build": "sass src/styles/global/_index.scss public/build/global.css",
+    "sass:watch": "npm run sass:build -- --watch",
+    "test:build": "npm run test:clean && tsc --project tsconfig.test.json",
+    "test:watch": "npm run test:build -- --watch",
+    "test:clean": "rm -rf ./test/lib",
+    "tw:build": "npx tailwindcss -i ./src/styles/tailwind.css -o ./public/build/tailwind.css",
+    "tw:watch": "npm run tw:build -- --watch"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^21.0.0",
@@ -14,6 +23,7 @@
     "@rollup/plugin-typescript": "^8.3.0",
     "@tsconfig/svelte": "^2.0.1",
     "autoprefixer": "^10.4.0",
+    "concurrently": "^7.6.0",
     "postcss": "^8.4.4",
     "postcss-load-config": "^3.1.0",
     "rollup": "^2.60.2",

@@ -1,0 +1,131 @@
+//#region SVG
+
+.svg {
+  filter: var(--filter-svg);
+}
+
+.svg-invert {
+  filter: var(--filter-svg-invert);
+}
+
+.svg-dark {
+  filter: var(--filter-dark);
+}
+
+.svg-light {
+  filter: var(--filter-light);
+}
+
+.svg-accent {
+  filter: var(--filter-svg-accent);
+}
+
+//#endregion SVG
+
+//#region Blurred Background
+
+:root[data-allow-blur="true"] {
+  .blurred-bg {
+    background-color: var(--color-blur-fallback)
+  }
+}
+
+@supports ((-webkit-backdrop-filter: none) or (backdrop-filter: none)) {
+  :root[data-allow-blur="true"] {
+    .blurred-bg {
+      background-color: transparent;
+      backdrop-filter: var(--filter-bg-blur);
+      -webkit-backdrop-filter: var(--filter-bg-blur);
+    }
+  }
+}
+
+//#endregion Blurred Background
+
+//#region Utilities
+
+.bottom-shadow {
+  box-shadow: 0px 2px 4px var(--color-shadow);
+}
+
+.tint-on-hover:hover {
+  opacity: 0.65;
+}
+
+//#endregion Utilities
+
+//#region Colors
+
+.text-primary {
+  color: var(--color-accent);
+}
+
+.text-secondary {
+  color: var(--color-accent-secondary);
+}
+
+.text-subtle,
+.hover\:text-subtle:hover {
+  color: var(--color-text-subtle);
+}
+
+.text-gradient {
+  background-image: linear-gradient(45deg, var(--color-accent) 0%, var(--color-accent-secondary) 100%);
+  display: inline-block;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -moz-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.bg-primary {
+  background-color: var(--color-accent);
+}
+
+.bg-secondary {
+  background-color: var(--color-accent-secondary);
+}
+
+.border-primary {
+  border-color: var(--color-accent);
+}
+
+.border-secondary {
+  border-color: var(--color-accent-secondary);
+}
+
+//#endregion Colors
+
+//#region Semantics
+
+mark.keystroke {
+  color: var(--color-text-subtle);
+  background-color: transparent;
+  border: 1px solid var(--color-text-subtle);
+  text-transform: uppercase;
+  border-radius: 2px;
+  padding: {
+    left: 0.35rem;
+    right: 0.35rem;
+  };
+}
+
+button.default-button {
+  color: var(--color-text);
+
+  img {
+    filter: var(--filter-svg);
+  }
+
+  &:not(:disabled):hover {
+    color: var(--color-bg);
+    border-color: var(--color-accent-secondary);
+    background-color: var(--color-accent-secondary);
+
+    img {
+      filter: var(--filter-svg-invert);
+    }
+  }
+}
+
+//#region Semantics
