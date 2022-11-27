@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { onMount } from "svelte";
+  import { onDestroy, onMount } from "svelte";
 
   const MIN_HEIGHT = 50;
   const COLLAPSED_HEIGHT = 30;
@@ -18,12 +18,24 @@
   let isCollapsed = false;
 
   onMount(() => {
+    window.addEventListener("resize", reactToResize);
+
     const bottomHeight = 200;
     const wrapperRect = panelWrapper.getBoundingClientRect();
     topPanel.style.height = `${wrapperRect.height - bottomHeight}px`;
     bottomPanel.style.height = `${bottomHeight}px`;
     collapsedBottomPanel.style.height = `${COLLAPSED_HEIGHT}px`;
   });
+
+  onDestroy(() => {
+    window.removeEventListener("resize", reactToResize);
+  });
+
+  function reactToResize() {
+    const wrapperRect = panelWrapper.getBoundingClientRect();
+    const bottomRect = bottomPanel.getBoundingClientRect();
+    topPanel.style.height = `${wrapperRect.height - bottomRect.height}px`;
+  }
 
   function handleMouseMove(e: MouseEvent) {
     if (isCollapsed) return;

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { onMount } from "svelte";
+  import { onDestroy, onMount } from "svelte";
 
   const MIN_WIDTH = 60;
   const COLLAPSED_WIDTH = 30;
@@ -18,12 +18,24 @@
   let isCollapsed = false;
 
   onMount(() => {
+    window.addEventListener("resize", reactToResize);
+
     const leftWidth = 300;
     const wrapperRect = panelWrapper.getBoundingClientRect();
     leftPanel.style.width = `${leftWidth}px`;
     rightPanel.style.width = `${wrapperRect.width - leftWidth}px`;
     collapsedLeftPanel.style.width = `${COLLAPSED_WIDTH}px`;
   });
+
+  onDestroy(() => {
+    window.removeEventListener("resize", reactToResize);
+  });
+
+  function reactToResize() {
+    const wrapperRect = panelWrapper.getBoundingClientRect();
+    const leftRect = leftPanel.getBoundingClientRect();
+    rightPanel.style.width = `${wrapperRect.width - leftRect.width}px`;
+  }
 
   function handleMouseMove(e: MouseEvent) {
     if (isCollapsed) return;

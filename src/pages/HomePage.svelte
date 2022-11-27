@@ -56,7 +56,7 @@
 </svelte:head>
 
 <div class="fixed top-10 left-0 right-0 bottom-0 dark:bg-gray-950">
-  <VerticalSplitView leftPanelName="Files">
+  <VerticalSplitView leftPanelName="File Manager">
     <div slot="left" class="absolute left-0 right-0 top-0 bottom-0">
       Files Content
     </div>
