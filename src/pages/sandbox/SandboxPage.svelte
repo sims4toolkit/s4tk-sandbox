@@ -5,6 +5,7 @@
   import Modal from "src/components/layout/Modal.svelte";
   import VerticalSplitView from "src/components/layout/VerticalSplitView.svelte";
   import { runScript } from "src/lib/script-runner";
+  import ConsolePanel from "./ConsolePanel.svelte";
 
   let running = false;
   let output: string = "";
@@ -12,7 +13,7 @@
   let selectedVersionIndex = 0;
   const versions = ["0.1.0"]; // TODO: fetch
 
-  const outputPlaceholder = `Calls to <span class="text-secondary">Sandbox.output(...args)</span> will be written here. For best results, keep your code synchronous.`;
+  let currentConsoleTab: any;
 
   let showVersionDetails = false;
   let versionDetails: { name: string; version: string }[];
@@ -107,24 +108,15 @@
       slot="right"
       class="absolute left-0 right-0 top-0 bottom-0 dark:bg-gray-800"
     >
-      <HorizontalSplitView bottomPanelName="Output">
+      <HorizontalSplitView bottomPanelName={currentConsoleTab}>
         <div slot="top">
           <TextEditor bind:editor />
         </div>
-        <div slot="bottom" class="p-2">
-          <h4
-            class="text-sm text-subtle underline underline-offset-4 select-none"
-          >
-            Output
-          </h4>
-          <p class="text-sm monospace mt-2 whitespace-pre-wrap">
-            {#if Boolean(output)}
-              {output}
-            {:else}
-              {@html outputPlaceholder}
-            {/if}
-          </p>
-        </div>
+        <ConsolePanel
+          slot="bottom"
+          bind:output
+          bind:currentTab={currentConsoleTab}
+        />
       </HorizontalSplitView>
     </div>
   </VerticalSplitView>
