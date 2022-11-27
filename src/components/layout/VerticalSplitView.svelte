@@ -96,7 +96,7 @@
     hidden={isCollapsed}
     class="absolute top-0 bottom-0 left-0 overflow-hidden border-r-2"
     class:border-r-gray-600={!isHoveringResizer}
-    class:dark:border-r-gray-800={!isHoveringResizer}
+    class:dark:border-r-gray-950={!isHoveringResizer}
     class:border-r-accent-primary-light={isHoveringResizer}
     class:dark:border-r-accent-primary-dark={isHoveringResizer}
   >
@@ -105,7 +105,7 @@
   <button
     bind:this={collapsedLeftPanel}
     hidden={!isCollapsed}
-    class="absolute top-0 bottom-0 left-0 justify-center pt-2 border-r-2 border-r-gray-600 dark:border-r-gray-800 select-none"
+    class="absolute top-0 bottom-0 left-0 justify-center pt-2 border-r-2 border-r-gray-600 dark:border-r-gray-950 select-none"
     class:flex={isCollapsed}
     on:click={handleCollapsedClick}
   >

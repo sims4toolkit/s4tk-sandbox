@@ -1,4 +1,5 @@
 <script lang="ts">
+  import TextEditor from "src/components/elements/TextEditor.svelte";
   import HorizontalSplitView from "src/components/layout/HorizontalSplitView.svelte";
   import VerticalSplitView from "src/components/layout/VerticalSplitView.svelte";
 
@@ -59,7 +60,7 @@
   <title>Sandbox</title>
 </svelte:head>
 
-<div class="fixed top-10 left-0 right-0 bottom-0 dark:bg-gray-950">
+<div class="fixed top-10 left-0 right-0 bottom-0 dark:bg-gray-900">
   <VerticalSplitView leftPanelName="File Manager">
     <div slot="left" class="p-2 absolute left-0 right-0 top-0 bottom-0">
       <div class="flex row items-center justify-between gap-2">
@@ -81,15 +82,16 @@
     </div>
     <div
       slot="right"
-      class="absolute left-0 right-0 top-0 bottom-0 dark:bg-gray-900"
+      class="absolute left-0 right-0 top-0 bottom-0 dark:bg-gray-800"
     >
       <HorizontalSplitView bottomPanelName="Output">
         <div slot="top">
-          <textarea
+          <!-- <textarea
             bind:value={sourceCode}
             class="w-full min-h-full p-2 monospace bg-transparent"
             placeholder={placeholderText}
-          />
+          /> -->
+          <TextEditor />
         </div>
         <div slot="bottom" class="p-2">
           <h4
@@ -121,7 +123,7 @@
   <img src="./assets/play.svg" class="svg-invert h-6" alt=">" />
 </button>
 
-<style lang="scss">
+<!-- <style lang="scss">
   textarea {
     color: var(--color-text);
 
@@ -129,4 +131,4 @@
       color: var(--color-text-subtle);
     }
   }
-</style>
+</style> -->
