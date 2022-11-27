@@ -1,92 +1,28 @@
 <script lang="ts">
   import type { EditorView } from "codemirror";
-  import { saveAs } from "file-saver";
   import TextEditor from "src/components/elements/TextEditor.svelte";
   import HorizontalSplitView from "src/components/layout/HorizontalSplitView.svelte";
   import Modal from "src/components/layout/Modal.svelte";
   import VerticalSplitView from "src/components/layout/VerticalSplitView.svelte";
-  import { ConsoleProxy } from "src/lib/console-proxy";
-  import { hyphenToCamel } from "src/lib/helpers";
-  import { onDestroy } from "svelte";
+  import { runScript } from "src/lib/script-runner";
+  import { time_ranges_to_array } from "svelte/internal";
 
-  // let sourceCode: string = "";
-  let acceptingOutput = false;
+  let running = false;
   let output: string = "";
-  // const placeholderText = "const { Package } = window.S4TK.models;";
-
   let editor: EditorView;
-
   let selectedVersionIndex = 0;
-
-  const versions = ["0.1.0"];
+  const versions = ["0.1.0"]; // TODO: fetch
 
   let showVersionDetails = false;
   let versionDetails: { name: string; version: string }[];
 
-  const subscriptions = [
-    ConsoleProxy.subscribe((...args: any[]) => {
-      if (acceptingOutput) output += args.join("\n") + "\n";
-    }),
-  ];
-
-  onDestroy(() => {
-    subscriptions.forEach((unsub) => unsub());
-  });
-
-  //@ts-ignore
-  window.Sandbox = {
-    output: (content: string) => (output += content + "\n"),
-    importMedia: (filename: string) => {
-      console.log(`Importing media '${filename}'`); // TODO:
-    },
-    download: (filename: string, content: string | Buffer) => {
-      console.log(`Downloading '${filename}'...`); // TODO:
-      saveAs(new Blob([content]), filename);
-    },
-    require(path: string) {
-      try {
-        if (path === "fs" || path === "path")
-          throw new Error(
-            "The Node file system is unavailable in this environment. Use the Sandbox's upload/download feature to interact with files."
-          );
-
-        const moduleNames = path.replace("@s4tk/", "").split("/");
-
-        let moduleValue: any;
-        for (let i = 0; i < moduleNames.length; ++i) {
-          const moduleName = hyphenToCamel(moduleNames[i]);
-
-          if (moduleValue) {
-            moduleValue = moduleValue[moduleName];
-          } else {
-            //@ts-ignore
-            moduleValue = window.S4TK[moduleName];
-          }
-
-          if (moduleValue == undefined)
-            throw new Error(
-              `Could not resolve '${path}' as an S4TK module. Note that Node modules are not available in this environment.`
-            );
-        }
-
-        return moduleValue;
-      } catch (err) {
-        console.error(err);
-      }
-    },
-  };
-
-  async function runCode() {
-    acceptingOutput = true;
-    try {
-      output = "";
-      const sourceCode = editor.state.doc.toJSON().join("\n");
-      const code = `const Buffer = window.Node.Buffer;const Sandbox = window.Sandbox;const require = Sandbox.require;${sourceCode}`;
-      eval(code);
-    } catch (err) {
-      output += err;
-    }
-    acceptingOutput = false;
+  async function runEditorScript() {
+    running = true;
+    output = "Running...";
+    const outputLines: string[] = [];
+    runScript(editor.state.doc.toJSON().join("\n"), outputLines);
+    output = outputLines.join("\n");
+    running = false;
   }
 
   async function fetchS4TK(version: string): Promise<string> {
@@ -172,11 +108,6 @@
     >
       <HorizontalSplitView bottomPanelName="Output">
         <div slot="top">
-          <!-- <textarea
-            bind:value={sourceCode}
-            class="w-full min-h-full p-2 monospace bg-transparent"
-            placeholder={placeholderText}
-          /> -->
           <TextEditor bind:editor />
         </div>
         <div slot="bottom" class="p-2">
@@ -189,7 +120,9 @@
             {#if Boolean(output)}
               {output}
             {:else}
-              Console logs will be output here.
+              Calls to <span class="text-secondary"
+                >Sandbox.output(...args)</span
+              > will be written here. For best results, keep your code synchronous.
             {/if}
           </p>
         </div>
@@ -199,9 +132,10 @@
 </div>
 
 <button
-  on:click={runCode}
+  on:click={runEditorScript}
   title="Run"
   class="fixed right-4 bottom-4 h-10 w-10 flex items-center justify-center rounded-full bg-secondary drop-shadow-md z-10"
+  disabled={running}
 >
   <img src="./assets/play.svg" class="svg-invert h-6" alt=">" />
 </button>
@@ -230,13 +164,3 @@
     </div>
   </Modal>
 {/if}
-
-<!-- <style lang="scss">
-  textarea {
-    color: var(--color-text);
-
-    &::placeholder {
-      color: var(--color-text-subtle);
-    }
-  }
-</style> -->
