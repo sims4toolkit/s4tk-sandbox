@@ -15,4 +15,4 @@
 <main class="min-h-screen flex flex-col">
   <Router {routes} restoreScrollState={true} />
 </main>
-<Footer />
+<!-- <Footer /> -->

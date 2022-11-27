@@ -1,6 +1,9 @@
 <script lang="ts">
   // intentionally blank
 
+  import HorizontalSplitView from "src/components/layout/HorizontalSplitView.svelte";
+  import VerticalSplitView from "src/components/layout/VerticalSplitView.svelte";
+
   let sourceCode: string = "";
   let output: string = "";
   const placeholderText = "const { Package } = window.S4TK.models;";
@@ -50,16 +53,21 @@
   })();
 </script>
 
-<div class="mt-10 p-4">
-  <textarea
-    bind:value={sourceCode}
-    class="w-full p-4 monospace bg-gray-200 dark:bg-gray-900"
-    placeholder={placeholderText}
-  />
-  <div>
-    <p>{output}</p>
-  </div>
-</div>
+<VerticalSplitView leftPanelName="Files">
+  <div slot="left" class="dark:bg-gray-700 h-full">Files Content</div>
+  <HorizontalSplitView bottomPanelName="Output" slot="right">
+    <div class="p-4" slot="top">
+      <textarea
+        bind:value={sourceCode}
+        class="w-full p-4 monospace bg-gray-200 dark:bg-gray-900"
+        placeholder={placeholderText}
+      />
+    </div>
+    <div slot="bottom" class="dark:bg-gray-700 w-full h-full">
+      <p>{output}</p>
+    </div>
+  </HorizontalSplitView>
+</VerticalSplitView>
 
 <button
   on:click={runCode}
