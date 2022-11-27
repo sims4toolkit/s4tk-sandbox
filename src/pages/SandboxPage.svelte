@@ -9,6 +9,7 @@
   import { onDestroy } from "svelte";
 
   // let sourceCode: string = "";
+  let acceptingOutput = false;
   let output: string = "";
   // const placeholderText = "const { Package } = window.S4TK.models;";
 
@@ -22,9 +23,9 @@
   let versionDetails: { name: string; version: string }[];
 
   const subscriptions = [
-    ConsoleProxy.subscribe(
-      (...args: any[]) => (output += args.join("\n") + "\n")
-    ),
+    ConsoleProxy.subscribe((...args: any[]) => {
+      if (acceptingOutput) output += args.join("\n") + "\n";
+    }),
   ];
 
   onDestroy(() => {
@@ -36,6 +37,11 @@
     output: (content: string) => (output += content + "\n"),
     require(path: string) {
       try {
+        if (path === "fs" || path === "path")
+          throw new Error(
+            "The Node file system is unavailable in this environment. Use the Sandbox's upload/download feature to interact with files."
+          );
+
         const moduleNames = path.replace("@s4tk/", "").split("/");
 
         let moduleValue: any;
@@ -50,7 +56,9 @@
           }
 
           if (moduleValue == undefined)
-            throw new Error(`Could not resolve '${path}' as an S4TK module.`);
+            throw new Error(
+              `Could not resolve '${path}' as an S4TK module. Note that Node modules are not available in this environment.`
+            );
         }
 
         return moduleValue;
@@ -61,6 +69,7 @@
   };
 
   async function runCode() {
+    acceptingOutput = true;
     try {
       output = "";
       const sourceCode = editor.state.doc.toJSON().join("\n");
@@ -69,6 +78,7 @@
     } catch (err) {
       output += err;
     }
+    acceptingOutput = false;
   }
 
   async function fetchS4TK(version: string): Promise<string> {
@@ -171,10 +181,7 @@
             {#if Boolean(output)}
               {output}
             {:else}
-              Use the <span
-                class="text-accent-secondary-light dark:text-accent-secondary-dark"
-                >output()</span
-              > function to show output.
+              Console logs will be output here.
             {/if}
           </p>
         </div>
