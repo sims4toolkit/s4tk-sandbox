@@ -152,6 +152,9 @@
           </li>
         {/each}
       </ul>
+      <p class="text-subtle text-xs mt-2">
+        To view the relevant docs, click the<br />version numbers.
+      </p>
     </div>
   </Modal>
 {/if}

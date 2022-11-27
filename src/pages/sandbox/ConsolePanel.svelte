@@ -1,4 +1,6 @@
 <script lang="ts">
+  import HelpConsoleContent from "./HelpConsoleContent.svelte";
+
   export let output: string;
   export let currentTab: "Output" | "Help" = "Output";
 
@@ -6,7 +8,7 @@
 </script>
 
 <div class="flex flex-col h-full overflow-hidden">
-  <div class="flex gap-4 px-2 pt-2">
+  <div class="flex gap-4 p-2">
     <button
       on:click={() => (currentTab = "Output")}
       disabled={currentTab === "Output"}
@@ -43,7 +45,7 @@
         {/if}
       </p>
     {:else}
-      <p>Help</p>
+      <HelpConsoleContent />
     {/if}
   </div>
 </div>
