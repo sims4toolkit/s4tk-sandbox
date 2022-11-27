@@ -1,5 +1,6 @@
 <script lang="ts">
   import type { EditorView } from "codemirror";
+  import { saveAs } from "file-saver";
   import TextEditor from "src/components/elements/TextEditor.svelte";
   import HorizontalSplitView from "src/components/layout/HorizontalSplitView.svelte";
   import Modal from "src/components/layout/Modal.svelte";
@@ -35,6 +36,13 @@
   //@ts-ignore
   window.Sandbox = {
     output: (content: string) => (output += content + "\n"),
+    importMedia: (filename: string) => {
+      console.log(`Importing media '${filename}'`); // TODO:
+    },
+    download: (filename: string, content: string | Buffer) => {
+      console.log(`Downloading '${filename}'...`); // TODO:
+      saveAs(new Blob([content]), filename);
+    },
     require(path: string) {
       try {
         if (path === "fs" || path === "path")
@@ -73,7 +81,7 @@
     try {
       output = "";
       const sourceCode = editor.state.doc.toJSON().join("\n");
-      const code = `const require = window.Sandbox.require;const output = window.Sandbox.output;${sourceCode}`;
+      const code = `const Buffer = window.Node.Buffer;const Sandbox = window.Sandbox;const require = Sandbox.require;${sourceCode}`;
       eval(code);
     } catch (err) {
       output += err;
