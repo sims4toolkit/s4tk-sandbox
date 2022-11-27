@@ -31,6 +31,13 @@
     </p>
   </div>
   <div>
+    <h4 class="text-sm font-bold mb-1">Output</h4>
+    <p class="text-subtle text-sm">
+      The <code>Sandbox.output(...args: string[]): void</code> function can be used
+      to write output to the sandbox console.
+    </p>
+  </div>
+  <div>
     <h4 class="text-sm font-bold mb-1">Running scripts from each other</h4>
     <p class="text-subtle text-sm">
       The <code>Sandbox.runScript(filename: string): any</code> function can be used

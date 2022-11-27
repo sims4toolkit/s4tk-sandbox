@@ -4,7 +4,7 @@
   export let output: string;
   export let currentTab: "Output" | "Help" = "Output";
 
-  const outputPlaceholder = `Calls to <span class="text-secondary">Sandbox.output(...args)</span> will be written here. For best results, keep your code synchronous.`;
+  const outputPlaceholder = `Calls to <code class="text-primary">Sandbox.output(...args: string[])</code> will be written here. Asynchronous output might not get written.`;
 </script>
 
 <div class="flex flex-col h-full overflow-hidden">
