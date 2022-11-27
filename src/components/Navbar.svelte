@@ -20,6 +20,13 @@
         class="svg tint-on-hover h-5"
       />
     </a>
+    <a href="/#/help">
+      <img
+        src="./assets/help-circle-outline.svg"
+        alt="Help"
+        class="svg tint-on-hover h-6"
+      />
+    </a>
   </div>
 </nav>
 
