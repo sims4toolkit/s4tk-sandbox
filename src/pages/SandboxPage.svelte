@@ -4,6 +4,9 @@
   import HorizontalSplitView from "src/components/layout/HorizontalSplitView.svelte";
   import Modal from "src/components/layout/Modal.svelte";
   import VerticalSplitView from "src/components/layout/VerticalSplitView.svelte";
+  import { ConsoleProxy } from "src/lib/console-proxy";
+  import { hyphenToCamel } from "src/lib/helpers";
+  import { onDestroy } from "svelte";
 
   // let sourceCode: string = "";
   let output: string = "";
@@ -18,19 +21,53 @@
   let showVersionDetails = false;
   let versionDetails: { name: string; version: string }[];
 
+  const subscriptions = [
+    ConsoleProxy.subscribe(
+      (...args: any[]) => (output += args.join("\n") + "\n")
+    ),
+  ];
+
+  onDestroy(() => {
+    subscriptions.forEach((unsub) => unsub());
+  });
+
   //@ts-ignore
   window.Sandbox = {
     output: (content: string) => (output += content + "\n"),
+    require(path: string) {
+      try {
+        const moduleNames = path.replace("@s4tk/", "").split("/");
+
+        let moduleValue: any;
+        for (let i = 0; i < moduleNames.length; ++i) {
+          const moduleName = hyphenToCamel(moduleNames[i]);
+
+          if (moduleValue) {
+            moduleValue = moduleValue[moduleName];
+          } else {
+            //@ts-ignore
+            moduleValue = window.S4TK[moduleName];
+          }
+
+          if (moduleValue == undefined)
+            throw new Error(`Could not resolve '${path}' as an S4TK module.`);
+        }
+
+        return moduleValue;
+      } catch (err) {
+        console.error(err);
+      }
+    },
   };
 
   async function runCode() {
     try {
       output = "";
       const sourceCode = editor.state.doc.toJSON().join("\n");
-      const code = `const output = window.Sandbox.output;${sourceCode}`;
+      const code = `const require = window.Sandbox.require;const output = window.Sandbox.output;${sourceCode}`;
       eval(code);
     } catch (err) {
-      output = err;
+      output += err;
     }
   }
 
