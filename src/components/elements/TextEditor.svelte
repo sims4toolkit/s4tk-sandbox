@@ -22,15 +22,30 @@
   });
 
   /*
-  const {StringTableResource} = window.S4TK.models;
+const { Package, StringTableResource } = require("@s4tk/models");
+const { BinaryResourceType } = require("@s4tk/models/enums");
+const { fnv64 } = require("@s4tk/hashing");
+const { formatResourceKey } = require("@s4tk/hashing/formatting");
+const { XmlElementNode } = require("@s4tk/xml-dom");
 
-  const stbl = new StringTableResource();
+const pkg = new Package();
+const stbl = new StringTableResource();
+stbl.addAndHash("Something");
 
-  stbl.addAndHash("first");
-  stbl.addAndHash("second");
-  stbl.addAndHash("third");
+pkg.add(
+  {
+    type: BinaryResourceType.StringTable,
+    group: 0x80000000,
+    instance: fnv64("frankk_TEST:stringTable")
+  },
+  stbl
+);
 
-  output(JSON.stringify(stbl.toJsonObject(), null, 2));
+const node = new XmlElementNode({ tag: "T" });
+
+console.log(formatResourceKey(pkg.entries[0].key));
+console.log(JSON.stringify(stbl.toJsonObject()));
+console.log(node.toXml());
   */
 </script>
 
