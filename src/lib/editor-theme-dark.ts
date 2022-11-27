@@ -119,9 +119,13 @@ export const darkHighlightStyle = HighlightStyle.define([
     color: violet
   },
   {
-    tag: [t.name, t.deleted, t.character, t.propertyName, t.macroName],
+    tag: [t.deleted, t.macroName, t.propertyName],
     color: coral
   },
+  // {
+  //   tag: [t.name, ],
+  //   color: whiskey
+  // },
   {
     tag: [t.function(t.variableName), t.labelName],
     color: malibu
@@ -131,7 +135,7 @@ export const darkHighlightStyle = HighlightStyle.define([
     color: whiskey
   },
   {
-    tag: [t.definition(t.name), t.separator],
+    tag: [t.definition(t.name), t.separator, t.character, t.name],
     color: ivory
   },
   {
