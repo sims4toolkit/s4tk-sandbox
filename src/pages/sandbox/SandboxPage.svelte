@@ -6,6 +6,7 @@
   import { runScript } from "src/lib/script-runner";
   import ConsolePanel from "src/pages/sandbox/ConsolePanel.svelte";
   import ApiVersionSwitcher from "./ApiVersionSwitcher.svelte";
+  import FileList from "./FileList.svelte";
 
   let running = false;
   let output: string = "";
@@ -21,6 +22,14 @@
     output = outputLines.join("\n");
     running = false;
   }
+
+  function handleMediaFileClick(filename: string) {
+    alert(filename);
+  }
+
+  function handleScriptFileClick(filename: string) {
+    alert(filename);
+  }
 </script>
 
 <svelte:head>
@@ -29,8 +38,21 @@
 
 <div class="fixed top-10 left-0 right-0 bottom-0 dark:bg-gray-900">
   <VerticalSplitView leftPanelName="File Manager">
-    <div slot="left" class="p-2 absolute left-0 right-0 top-0 bottom-0">
+    <div slot="left" class="absolute left-0 right-0 top-0 bottom-0">
       <ApiVersionSwitcher />
+      <div class="h-full overflow-y-auto">
+        <FileList
+          title="Scripts"
+          filenames={["first", "second", "third"]}
+          onClick={handleScriptFileClick}
+          expanded={true}
+        />
+        <FileList
+          title="Media"
+          filenames={["first", "second", "third"]}
+          onClick={handleMediaFileClick}
+        />
+      </div>
     </div>
     <div
       slot="right"

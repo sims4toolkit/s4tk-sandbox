@@ -30,7 +30,7 @@
   }
 </script>
 
-<div>
+<div class="p-2">
   <div class="flex row items-center justify-between gap-2 mb-2">
     <p class="text-sm">API Version:</p>
     <select
