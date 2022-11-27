@@ -54,7 +54,7 @@
               {output}
             {:else}
               Use the <span
-                class="text-accent-primary-light dark:text-accent-primary-dark"
+                class="text-accent-secondary-light dark:text-accent-secondary-dark"
                 >output()</span
               > function to show output.
             {/if}
