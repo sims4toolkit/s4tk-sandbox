@@ -1,211 +1,114 @@
 <script lang="ts">
-  // This file is messy -- it was copied directly from the S4TK desktop app,
-  // which was a POC. It works well enough, so whatever.
+  import { onMount } from "svelte";
 
-  export let leftPanelName: string;
-  export const collapseLeftPanel = () => {
-    leftIsCollapsed = true;
-    updatePanelWidths(collapsedLeftWidth);
-  };
+  const MIN_WIDTH = 50;
+  const COLLAPSED_WIDTH = 30;
 
-  const navbarWidth = 0; // this is styled in Navbar
-  const collapsedLeftWidth = 25; // this is styled in Navbar
-  const leftCollapsePoint: number = 100;
-  const defaultLeftWidth: number = 350; // default left width set in styling
-  const maxLeftWidthPercent: number = 0.9;
+  // elements
+  let panelWrapper: HTMLDivElement;
+  let leftPanel: HTMLDivElement;
+  let rightPanel: HTMLDivElement;
+  let collapsedLeftPanel: HTMLButtonElement;
 
-  let resizer: HTMLElement;
-  let leftPanel: HTMLElement;
-  let rightPanel: HTMLElement;
+  // state
+  let isHoveringResizer = false;
+  let isResizing = false;
+  let isCollapsed = false;
 
-  let isHoveringResizer: boolean = false;
-  let showHighlight: boolean = false;
-  let isResizing: boolean = false;
-  let leftIsCollapsed: boolean = false;
-  let resizePosition: number = defaultLeftWidth;
-  $: useCursorR = isResizing && resizePosition <= leftCollapsePoint;
+  onMount(() => {
+    const leftWidth = 300;
+    const wrapperRect = panelWrapper.getBoundingClientRect();
+    leftPanel.style.width = `${leftWidth}px`;
+    rightPanel.style.width = `${wrapperRect.width - leftWidth}px`;
+    collapsedLeftPanel.style.width = `${COLLAPSED_WIDTH}px`;
+  });
 
-  function onMouseEnterResizer() {
-    isHoveringResizer = true;
-    setTimeout(() => {
-      showHighlight = isHoveringResizer;
-    }, 350);
-  }
+  function handleMouseMove(e: MouseEvent) {
+    if (isCollapsed) return;
 
-  function onMouseLeaveResizer() {
-    isHoveringResizer = false;
-    showHighlight = false;
-  }
-
-  function onMouseDownResizer() {
-    isResizing = true;
-    showHighlight = true;
-  }
-
-  function onMouseUp() {
-    isResizing = false;
-  }
-
-  function onMouseMove(e: MouseEvent) {
     if (isResizing) {
-      resizePosition = e.clientX - navbarWidth;
-      if (leftIsCollapsed) {
-        if (resizePosition > leftCollapsePoint) {
-          leftIsCollapsed = false;
-          updatePanelWidths(resizePosition);
-        }
+      const wrapperRect = panelWrapper.getBoundingClientRect();
+      const leftWidth = e.clientX - wrapperRect.left;
+      const rightWidth = wrapperRect.width - leftWidth;
+
+      if (rightWidth < MIN_WIDTH) return;
+      if (leftWidth < MIN_WIDTH) {
+        isCollapsed = true;
+        isResizing = false;
+        isHoveringResizer = false;
+        rightPanel.style.width = `${wrapperRect.width - COLLAPSED_WIDTH}px`;
+        return;
+      }
+
+      leftPanel.style.width = `${leftWidth}px`;
+      rightPanel.style.width = `${rightWidth}px`;
+    } else {
+      const leftRect = leftPanel.getBoundingClientRect();
+      if (e.clientX >= leftRect.right - 4 && e.clientX <= leftRect.right) {
+        isHoveringResizer = true;
       } else {
-        if (resizePosition >= leftCollapsePoint) {
-          updatePanelWidths(resizePosition);
-        } else if (resizePosition <= leftCollapsePoint) {
-          leftIsCollapsed = true;
-          updatePanelWidths(collapsedLeftWidth);
-        }
+        isHoveringResizer = false;
       }
     }
   }
 
-  function updatePanelWidths(leftPanelWidth: number) {
-    const leftMaxWidth: number = Math.floor(
-      (window.innerWidth - navbarWidth) * maxLeftWidthPercent
-    );
-
-    if (leftPanelWidth > leftMaxWidth) leftPanelWidth = leftMaxWidth;
-    leftPanel.style.width = `${leftPanelWidth}px`;
-    resizer.style.left = `${leftPanelWidth - 2}px`; // -2 comes from the offset set in styling
-    rightPanel.style.left = `${leftPanelWidth + 2}px`; // + 2 comes from the offset set in styling
+  function handleMouseDown(e: MouseEvent) {
+    if (isHoveringResizer) isResizing = true;
   }
 
-  function expandLeftPanel() {
-    leftIsCollapsed = false;
-    updatePanelWidths(defaultLeftWidth);
+  function handleMouseUp(e: MouseEvent) {
+    isResizing = false;
+  }
+
+  function handleCollapsedClick() {
+    isCollapsed = false;
+    const wrapperRect = panelWrapper.getBoundingClientRect();
+    leftPanel.style.width = `${MIN_WIDTH + 10}px`;
+    rightPanel.style.width = `${wrapperRect.width - MIN_WIDTH + 10}px`;
   }
 </script>
 
 <div
-  class="splitview"
-  class:is-resizing={isResizing}
-  class:cursor-r={useCursorR}
-  on:mouseup={onMouseUp}
-  on:mousemove={onMouseMove}
-  on:mouseleave={onMouseUp}
+  bind:this={panelWrapper}
+  class="absolute top-0 bottom-0 left-0 right-0 whitespace-nowrap"
+  class:cursor-col-resize={isHoveringResizer}
+  on:mousemove={handleMouseMove}
+  on:mousedown={handleMouseDown}
+  on:mouseup={handleMouseUp}
 >
-  {#if leftIsCollapsed}
-    <button
-      class="button-wrapper collapsed-left-panel hoverable"
-      draggable="false"
-      on:click={expandLeftPanel}
-    >
-      <span>{leftPanelName}</span>
-    </button>
-  {/if}
   <div
-    class="left-panel h-100"
     bind:this={leftPanel}
-    hidden={leftIsCollapsed}
-    class:prevent-interaction={isResizing}
+    hidden={isCollapsed}
+    class="absolute top-0 bottom-0 left-0 overflow-hidden border-r-2"
+    class:border-r-gray-600={!isHoveringResizer}
+    class:dark:border-r-gray-900={!isHoveringResizer}
+    class:border-r-accent-primary-light={isHoveringResizer}
+    class:dark:border-r-accent-primary-dark={isHoveringResizer}
   >
     <slot name="left" />
   </div>
+  <button
+    bind:this={collapsedLeftPanel}
+    hidden={!isCollapsed}
+    class="absolute top-0 bottom-0 left-0 justify-center pt-2 border-r-2 border-r-gray-600 dark:border-r-gray-900 select-none"
+    class:flex={isCollapsed}
+    on:click={handleCollapsedClick}
+  >
+    <p class="text-sm text-subtle collapsed-p">Placeholder</p>
+  </button>
 
   <div
-    class="resizer"
-    class:cursor-r={useCursorR || leftIsCollapsed}
-    bind:this={resizer}
-    on:mouseenter={onMouseEnterResizer}
-    on:mouseleave={onMouseLeaveResizer}
-    on:mousedown={onMouseDownResizer}
-    class:highlight={showHighlight || isResizing}
-  />
-
-  <div
-    class="right-panel"
     bind:this={rightPanel}
-    class:prevent-interaction={isResizing}
+    class="absolute top-0 bottom-0 right-0 overflow-hidden"
   >
     <slot name="right" />
   </div>
 </div>
 
 <style lang="scss">
-  $default-left-width: 350px;
-  $resizer-width: 4px; // this is hardcoded in script
-  $resizer-border: 2px;
-
-  .splitview {
-    position: absolute;
-    top: 50px;
-    left: 0;
-    right: 0;
-    bottom: 0;
-
-    &.is-resizing {
-      cursor: col-resize;
-    }
-
-    .collapsed-left-panel,
-    .left-panel,
-    .right-panel,
-    .resizer {
-      position: absolute;
-      top: 0;
-      bottom: 0;
-      overflow: hidden;
-    }
-
-    .collapsed-left-panel {
-      width: 25px;
-      // background-color: var(--color-bg-secondary);
-      font-size: 14px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-
-      span {
-        writing-mode: vertical-lr;
-        text-orientation: mixed;
-        transform: rotate(-180deg);
-        margin-top: 16px;
-        opacity: 0.65;
-
-        &:hover {
-          cursor: pointer;
-          opacity: 1;
-        }
-      }
-    }
-
-    .left-panel {
-      left: 0;
-      width: $default-left-width;
-    }
-
-    .right-panel {
-      right: 0;
-      left: $default-left-width + $resizer-border;
-    }
-
-    .resizer {
-      left: $default-left-width - $resizer-width + $resizer-border;
-      width: $resizer-width;
-      box-sizing: border-box;
-      cursor: col-resize;
-      border-right: $resizer-border solid var(--color-shadow);
-      background-color: transparent;
-      z-index: 512;
-
-      &.highlight {
-        border-right-color: var(--color-accent);
-      }
-    }
-  }
-
-  .cursor-r {
-    cursor: e-resize !important;
-  }
-
-  .prevent-interaction {
-    pointer-events: none;
-    user-select: none;
+  p.collapsed-p {
+    writing-mode: vertical-lr;
+    text-orientation: mixed;
+    transform: rotate(-180deg);
   }
 </style>

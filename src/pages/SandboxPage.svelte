@@ -26,22 +26,24 @@
   <title>Sandbox</title>
 </svelte:head>
 
-<VerticalSplitView leftPanelName="Files">
-  <div slot="left" class="dark:bg-gray-700 h-full">Files Content</div>
-  <HorizontalSplitView bottomPanelName="Output" slot="right">
-    <div class="p-4" slot="top">
-      <textarea
-        bind:value={sourceCode}
-        class="w-full p-4 monospace bg-gray-200 dark:bg-gray-900"
-        placeholder={placeholderText}
-      />
-    </div>
-    <div slot="bottom">
-      <h4>Output</h4>
-      <p>{output}</p>
-    </div>
-  </HorizontalSplitView>
-</VerticalSplitView>
+<div class="fixed top-10 left-0 right-0 bottom-0">
+  <VerticalSplitView leftPanelName="Files">
+    <div slot="left" class="dark:bg-gray-700 h-full">Files Content</div>
+    <HorizontalSplitView bottomPanelName="Output" slot="right">
+      <div class="p-4" slot="top">
+        <textarea
+          bind:value={sourceCode}
+          class="w-full p-4 monospace bg-gray-200 dark:bg-gray-900"
+          placeholder={placeholderText}
+        />
+      </div>
+      <div slot="bottom">
+        <h4>Output</h4>
+        <p>{output}</p>
+      </div>
+    </HorizontalSplitView>
+  </VerticalSplitView>
+</div>
 
 <button
   on:click={runCode}
