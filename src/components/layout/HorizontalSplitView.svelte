@@ -101,7 +101,7 @@
   <div
     bind:this={bottomPanel}
     hidden={isCollapsed}
-    class="absolute bottom-0 left-0 right-0 overflow-hidden border-t-2"
+    class="absolute bottom-0 left-0 right-0 overflow-auto border-t-2"
     class:border-t-gray-600={!isHoveringResizer}
     class:dark:border-t-gray-800={!isHoveringResizer}
     class:border-t-accent-primary-light={isHoveringResizer}

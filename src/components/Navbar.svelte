@@ -23,6 +23,13 @@
         class="svg tint-on-hover h-5"
       />
     </a>
+    <a href="http://sims4toolkit.com/#/docs" target="_blank">
+      <img
+        src="./assets/book-outline.svg"
+        alt="Docs"
+        class="svg tint-on-hover h-5"
+      />
+    </a>
     <a href="/help" use:link>
       <img
         src="./assets/{helpIcon}.svg"

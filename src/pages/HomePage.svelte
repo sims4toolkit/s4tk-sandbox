@@ -97,7 +97,7 @@
           >
             Output
           </h4>
-          <p class="text-sm monospace mt-2">
+          <p class="text-sm monospace mt-2 whitespace-pre-wrap">
             {#if Boolean(output)}
               {output}
             {:else}
