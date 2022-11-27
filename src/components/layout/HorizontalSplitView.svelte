@@ -1,212 +1,106 @@
 <script lang="ts">
-  // This file is messy -- it's based on the vertical split view.
+  import { onMount } from "svelte";
 
-  export let bottomPanelName: string;
-  export const collapseBottomPanel = () => {
-    bottomIsCollapsed = true;
-    updatePanelHeights(collapsedBottomHeight);
-  };
+  const MIN_HEIGHT = 50;
+  const COLLAPSED_HEIGHT = 30;
 
-  const navbarHeight = 0; // this is styled in Navbar
-  const collapsedBottomHeight = 25; // this is styled in Navbar
-  const bottomCollapsePoint: number = 100;
-  const defaultBottomHeight: number = 250; // default bottom height set in styling
-  const maxBottomHeightPercent: number = 0.8;
+  // elements
+  let panelWrapper: HTMLDivElement;
+  let topPanel: HTMLDivElement;
+  let bottomPanel: HTMLDivElement;
+  let collapsedBottomPanel: HTMLButtonElement;
 
-  let resizer: HTMLElement;
-  let topPanel: HTMLElement;
-  let bottomPanel: HTMLElement;
+  // state
+  let isHoveringResizer = false;
+  let isResizing = false;
+  let isCollapsed = false;
 
-  let isHoveringResizer: boolean = false;
-  let showHighlight: boolean = false;
-  let isResizing: boolean = false;
-  let bottomIsCollapsed: boolean = false;
-  let resizePosition: number = defaultBottomHeight;
-  $: useCursorR = isResizing && resizePosition <= bottomCollapsePoint;
+  onMount(() => {
+    const bottomHeight = 200;
+    const wrapperRect = panelWrapper.getBoundingClientRect();
+    topPanel.style.height = `${wrapperRect.height - bottomHeight}px`;
+    bottomPanel.style.height = `${bottomHeight}px`;
+    collapsedBottomPanel.style.height = `${COLLAPSED_HEIGHT}px`;
+  });
 
-  function onMouseEnterResizer() {
-    isHoveringResizer = true;
-    setTimeout(() => {
-      showHighlight = isHoveringResizer;
-    }, 350);
-  }
+  function handleMouseMove(e: MouseEvent) {
+    if (isCollapsed) return;
 
-  function onMouseLeaveResizer() {
-    isHoveringResizer = false;
-    showHighlight = false;
-  }
-
-  function onMouseDownResizer() {
-    isResizing = true;
-    showHighlight = true;
-  }
-
-  function onMouseUp() {
-    isResizing = false;
-  }
-
-  function onMouseMove(e: MouseEvent) {
     if (isResizing) {
-      resizePosition = window.innerHeight - e.clientY - navbarHeight; // FIXME: probably need to add screen height or something
-      if (bottomIsCollapsed) {
-        if (resizePosition > bottomCollapsePoint) {
-          bottomIsCollapsed = false;
-          updatePanelHeights(resizePosition);
-        }
+      const wrapperRect = panelWrapper.getBoundingClientRect();
+      const topHeight = e.clientY - wrapperRect.top;
+      const bottomHeight = wrapperRect.height - topHeight;
+
+      if (topHeight < MIN_HEIGHT) return;
+      if (bottomHeight < MIN_HEIGHT) {
+        isCollapsed = true;
+        isResizing = false;
+        isHoveringResizer = false;
+        topPanel.style.height = `${wrapperRect.height - COLLAPSED_HEIGHT}px`;
+        return;
+      }
+
+      topPanel.style.height = `${topHeight}px`;
+      bottomPanel.style.height = `${bottomHeight}px`;
+    } else {
+      const bottomRect = bottomPanel.getBoundingClientRect();
+      if (e.clientY >= bottomRect.top && e.clientY <= bottomRect.top + 4) {
+        isHoveringResizer = true;
       } else {
-        if (resizePosition >= bottomCollapsePoint) {
-          updatePanelHeights(resizePosition);
-        } else if (resizePosition <= bottomCollapsePoint) {
-          bottomIsCollapsed = true;
-          updatePanelHeights(collapsedBottomHeight);
-        }
+        isHoveringResizer = false;
       }
     }
   }
 
-  function updatePanelHeights(bottomPanelHeight: number) {
-    const bottomMaxHeight: number = Math.floor(
-      (window.innerHeight - navbarHeight) * maxBottomHeightPercent
-    );
-
-    if (bottomPanelHeight > bottomMaxHeight)
-      bottomPanelHeight = bottomMaxHeight;
-    const topPanelHeight = window.innerHeight - bottomPanelHeight;
-    topPanel.style.height = `${topPanelHeight}px`;
-    resizer.style.top = `${topPanelHeight - 2}px`; // -2 comes from the offset set in styling
-    bottomPanel.style.top = `${topPanelHeight + 2}px`; // + 2 comes from the offset set in styling
+  function handleMouseDown(e: MouseEvent) {
+    if (isHoveringResizer) isResizing = true;
   }
 
-  function expandBottomPanel() {
-    bottomIsCollapsed = false;
-    updatePanelHeights(defaultBottomHeight);
+  function handleMouseUp(e: MouseEvent) {
+    isResizing = false;
+  }
+
+  function handleCollapsedClick() {
+    isCollapsed = false;
+    const wrapperRect = panelWrapper.getBoundingClientRect();
+    topPanel.style.height = `${wrapperRect.height - MIN_HEIGHT + 10}px`;
+    bottomPanel.style.height = `${MIN_HEIGHT + 10}px`;
   }
 </script>
 
 <div
-  class="splitview"
-  class:is-resizing={isResizing}
-  class:cursor-r={useCursorR}
-  on:mouseup={onMouseUp}
-  on:mousemove={onMouseMove}
-  on:mouseleave={onMouseUp}
+  bind:this={panelWrapper}
+  class="absolute top-0 bottom-0 left-0 right-0"
+  class:cursor-row-resize={isHoveringResizer}
+  on:mousemove={handleMouseMove}
+  on:mousedown={handleMouseDown}
+  on:mouseup={handleMouseUp}
 >
   <div
-    class="top-panel"
     bind:this={topPanel}
-    class:prevent-interaction={isResizing}
+    class="absolute top-0 left-0 right-0 overflow-hidden"
   >
     <slot name="top" />
   </div>
 
   <div
-    class="resizer"
-    class:cursor-r={useCursorR || bottomIsCollapsed}
-    bind:this={resizer}
-    on:mouseenter={onMouseEnterResizer}
-    on:mouseleave={onMouseLeaveResizer}
-    on:mousedown={onMouseDownResizer}
-    class:highlight={showHighlight || isResizing}
-  />
-
-  {#if bottomIsCollapsed}
-    <button
-      class="collapsed-bottom-panel hoverable"
-      draggable="false"
-      on:click={expandBottomPanel}
-    >
-      <span>{bottomPanelName}</span>
-    </button>
-  {/if}
-  <div
-    class="bottom-panel w-full"
     bind:this={bottomPanel}
-    hidden={bottomIsCollapsed}
-    class:prevent-interaction={isResizing}
+    hidden={isCollapsed}
+    class="absolute bottom-0 left-0 right-0 overflow-hidden border-t-2"
+    class:border-t-gray-600={!isHoveringResizer}
+    class:dark:border-t-gray-900={!isHoveringResizer}
+    class:border-t-accent-primary-light={isHoveringResizer}
+    class:dark:border-t-accent-primary-dark={isHoveringResizer}
   >
     <slot name="bottom" />
   </div>
+  <button
+    bind:this={collapsedBottomPanel}
+    hidden={!isCollapsed}
+    class="absolute bottom-0 left-0 right-0 items-center pl-2 border-t-2 border-t-gray-600 dark:border-t-gray-900 select-none"
+    class:flex={isCollapsed}
+    on:click={handleCollapsedClick}
+  >
+    <p class="text-sm text-subtle">Placeholder</p>
+  </button>
 </div>
-
-<style lang="scss">
-  $default-bottom-height: 250px;
-  $resizer-height: 4px; // this is hardcoded in script
-  $resizer-border: 2px;
-
-  .splitview {
-    position: absolute;
-    top: 50px;
-    left: 0;
-    right: 0;
-    bottom: 0;
-
-    &.is-resizing {
-      cursor: col-resize;
-    }
-
-    .collapsed-bottom-panel,
-    .bottom-panel,
-    .top-panel,
-    .resizer {
-      position: absolute;
-      left: 0;
-      right: 0;
-      overflow: hidden;
-    }
-
-    .collapsed-bottom-panel {
-      height: 25px;
-      background-color: var(--color-bg-secondary);
-      font-size: 14px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-
-      span {
-        // writing-mode: vertical-lr;
-        // text-orientation: mixed;
-        // transform: rotate(-180deg);
-        margin-left: 16px;
-        opacity: 0.65;
-
-        &:hover {
-          cursor: pointer;
-          opacity: 1;
-        }
-      }
-    }
-
-    .bottom-panel {
-      bottom: 0;
-      height: $default-bottom-height;
-    }
-
-    .top-panel {
-      top: 0;
-      bottom: $default-bottom-height + $resizer-border;
-    }
-
-    .resizer {
-      top: $default-bottom-height - $resizer-height + $resizer-border;
-      height: $resizer-height;
-      box-sizing: border-box;
-      cursor: col-resize;
-      border-top: $resizer-border solid var(--color-shadow);
-      background-color: transparent;
-      z-index: 512;
-
-      &.highlight {
-        border-top-color: var(--color-accent);
-      }
-    }
-  }
-
-  .cursor-r {
-    cursor: e-resize !important;
-  }
-
-  .prevent-interaction {
-    pointer-events: none;
-    user-select: none;
-  }
-</style>

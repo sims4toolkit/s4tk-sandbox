@@ -36,7 +36,8 @@
         placeholder={placeholderText}
       />
     </div>
-    <div slot="bottom" class="dark:bg-gray-700 w-full h-full">
+    <div slot="bottom">
+      <h4>Output</h4>
       <p>{output}</p>
     </div>
   </HorizontalSplitView>
