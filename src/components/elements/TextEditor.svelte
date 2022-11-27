@@ -43,9 +43,9 @@ pkg.add(
 
 const node = new XmlElementNode({ tag: "T" });
 
-console.log(formatResourceKey(pkg.entries[0].key));
-console.log(JSON.stringify(stbl.toJsonObject()));
-console.log(node.toXml());
+Sandbox.output(formatResourceKey(pkg.entries[0].key));
+Sandbox.output(JSON.stringify(stbl.toJsonObject()));
+Sandbox.output(node.toXml());
   */
 </script>
 
