@@ -2,6 +2,7 @@
   import type { EditorView } from "codemirror";
   import TextEditor from "src/components/elements/TextEditor.svelte";
   import HorizontalSplitView from "src/components/layout/HorizontalSplitView.svelte";
+  import Modal from "src/components/layout/Modal.svelte";
   import VerticalSplitView from "src/components/layout/VerticalSplitView.svelte";
 
   // let sourceCode: string = "";
@@ -13,6 +14,9 @@
   let selectedVersionIndex = 0;
 
   const versions = ["0.1.0"];
+
+  let showVersionDetails = false;
+  let versionDetails: { name: string; version: string }[];
 
   //@ts-ignore
   window.Sandbox = {
@@ -37,7 +41,30 @@
       const storageKey = `s4tk-api-${version}`;
       const cached = localStorage.getItem(storageKey);
 
-      if (cached) return resolve(cached);
+      if (cached) {
+        versionDetails = JSON.parse(
+          localStorage.getItem(`s4tk-api-details-${version}`)
+        );
+        resolve(cached);
+        return;
+      }
+
+      console.log("Fetching...");
+
+      fetch(
+        `https://raw.githubusercontent.com/sims4toolkit/browserfied/version/${version}/build/s4tk.specs.json`
+      )
+        .then((res) => {
+          res.text().then((text) => {
+            localStorage.setItem(`s4tk-api-details-${version}`, text);
+            versionDetails = JSON.parse(
+              localStorage.getItem(`s4tk-api-details-${version}`)
+            );
+          });
+        })
+        .catch((err) => {
+          reject(err);
+        });
 
       fetch(
         `https://raw.githubusercontent.com/sims4toolkit/browserfied/version/${version}/build/s4tk.min.js`
@@ -80,7 +107,7 @@
         </select>
         <button
           class="text-accent-secondary-light dark:text-accent-secondary-dark underline underline-offset-2 text-sm"
-          >Details</button
+          on:click={() => (showVersionDetails = true)}>Details</button
         >
       </div>
     </div>
@@ -122,10 +149,26 @@
 <button
   on:click={runCode}
   title="Run"
-  class="fixed right-4 bottom-4 h-10 w-10 flex items-center justify-center rounded-full bg-secondary drop-shadow z-40"
+  class="fixed right-4 bottom-4 h-10 w-10 flex items-center justify-center rounded-full bg-secondary drop-shadow-md z-10"
 >
   <img src="./assets/play.svg" class="svg-invert h-6" alt=">" />
 </button>
+
+{#if showVersionDetails}
+  <Modal
+    title="API Version {versions[selectedVersionIndex]}"
+    onClose={() => (showVersionDetails = false)}
+  >
+    <div>
+      {#each versionDetails as vd, key (key)}
+        <p class="text-sm">
+          <span class="text-primary">{vd.name}</span>:
+          <span class="monospace">{vd.version}</span>
+        </p>
+      {/each}
+    </div>
+  </Modal>
+{/if}
 
 <!-- <style lang="scss">
   textarea {
