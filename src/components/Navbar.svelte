@@ -2,7 +2,6 @@
   import { link, location } from "svelte-spa-router";
 
   $: homeIcon = $location === "/" ? "home" : "home-outline";
-  $: codeIcon = $location === "/code" ? "code-slash" : "code-slash-outline";
   $: helpIcon = $location === "/help" ? "help-circle" : "help-circle-outline";
 </script>
 
@@ -22,13 +21,6 @@
         src="./assets/{homeIcon}.svg"
         alt="Home"
         class="svg tint-on-hover h-5"
-      />
-    </a>
-    <a href="/code" use:link>
-      <img
-        src="./assets/{codeIcon}.svg"
-        alt="Code"
-        class="svg tint-on-hover h-6"
       />
     </a>
     <a href="/help" use:link>
