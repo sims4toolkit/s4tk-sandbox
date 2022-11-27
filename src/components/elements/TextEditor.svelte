@@ -3,7 +3,7 @@
   import { onMount } from "svelte";
   import { newEditor } from "src/lib/editor";
 
-  let editor: EditorView;
+  export let editor: EditorView = null;
   let editorElement: HTMLDivElement;
 
   onMount(() => {

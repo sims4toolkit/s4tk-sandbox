@@ -1,11 +1,14 @@
 <script lang="ts">
+  import type { EditorView } from "codemirror";
   import TextEditor from "src/components/elements/TextEditor.svelte";
   import HorizontalSplitView from "src/components/layout/HorizontalSplitView.svelte";
   import VerticalSplitView from "src/components/layout/VerticalSplitView.svelte";
 
-  let sourceCode: string = "";
+  // let sourceCode: string = "";
   let output: string = "";
-  const placeholderText = "const { Package } = window.S4TK.models;";
+  // const placeholderText = "const { Package } = window.S4TK.models;";
+
+  let editor: EditorView;
 
   let selectedVersionIndex = 0;
 
@@ -19,6 +22,7 @@
   async function runCode() {
     try {
       output = "";
+      const sourceCode = editor.state.doc.toJSON().join("\n");
       const code = `const output = window.Sandbox.output;${sourceCode}`;
       eval(code);
     } catch (err) {
@@ -91,7 +95,7 @@
             class="w-full min-h-full p-2 monospace bg-transparent"
             placeholder={placeholderText}
           /> -->
-          <TextEditor />
+          <TextEditor bind:editor />
         </div>
         <div slot="bottom" class="p-2">
           <h4
