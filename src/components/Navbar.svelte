@@ -24,7 +24,7 @@
         class="svg tint-on-hover h-5"
       />
     </a>
-    <a href="/code" use:link class="border">
+    <a href="/code" use:link>
       <img
         src="./assets/{codeIcon}.svg"
         alt="Code"
