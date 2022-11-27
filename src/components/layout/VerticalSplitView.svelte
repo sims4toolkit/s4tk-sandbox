@@ -4,6 +4,8 @@
   const MIN_WIDTH = 50;
   const COLLAPSED_WIDTH = 30;
 
+  export let leftPanelName: string;
+
   // elements
   let panelWrapper: HTMLDivElement;
   let leftPanel: HTMLDivElement;
@@ -94,7 +96,7 @@
     class:flex={isCollapsed}
     on:click={handleCollapsedClick}
   >
-    <p class="text-sm text-subtle collapsed-p">Placeholder</p>
+    <p class="text-sm text-subtle collapsed-p">{leftPanelName}</p>
   </button>
 
   <div

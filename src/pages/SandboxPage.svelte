@@ -37,9 +37,22 @@
           placeholder={placeholderText}
         />
       </div>
-      <div slot="bottom">
-        <h4>Output</h4>
-        <p>{output}</p>
+      <div slot="bottom" class="p-2">
+        <h4
+          class="text-sm text-subtle underline underline-offset-4 select-none"
+        >
+          Output
+        </h4>
+        <p class="text-sm monospace mt-2">
+          {#if Boolean(output)}
+            {output}
+          {:else}
+            Use the <span
+              class="text-accent-primary-light dark:text-accent-primary-dark"
+              >output()</span
+            > function to show output.
+          {/if}
+        </p>
       </div>
     </HorizontalSplitView>
   </VerticalSplitView>

@@ -4,6 +4,8 @@
   const MIN_HEIGHT = 50;
   const COLLAPSED_HEIGHT = 30;
 
+  export let bottomPanelName: string;
+
   // elements
   let panelWrapper: HTMLDivElement;
   let topPanel: HTMLDivElement;
@@ -101,6 +103,6 @@
     class:flex={isCollapsed}
     on:click={handleCollapsedClick}
   >
-    <p class="text-sm text-subtle">Placeholder</p>
+    <p class="text-sm text-subtle">{bottomPanelName}</p>
   </button>
 </div>
