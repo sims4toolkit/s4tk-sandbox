@@ -44,7 +44,7 @@ const Sandbox: SandboxFunctions = {
     try {
       if (path === "fs" || path === "path")
         throw new Error(
-          `The Node file system is unavailable in this environment. Use Sandbox.import(filename) and Sandbox.download(filename, data) to interact with uploaded files.`
+          `The Node file system is unavailable in this environment. Use Sandbox.import(filename) and Sandbox.download(filename, data) to interact with files.`
         );
 
       const moduleNames = path.replace("@s4tk/", "").split("/");
