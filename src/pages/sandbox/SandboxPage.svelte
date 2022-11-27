@@ -4,19 +4,19 @@
   import HorizontalSplitView from "src/components/layout/HorizontalSplitView.svelte";
   import Modal from "src/components/layout/Modal.svelte";
   import VerticalSplitView from "src/components/layout/VerticalSplitView.svelte";
+  import { loadApi, S4TK_API_STATE, S4TK_API_VERSIONS } from "src/lib/s4tk-api";
   import { runScript } from "src/lib/script-runner";
-  import ConsolePanel from "./ConsolePanel.svelte";
+  import ConsolePanel from "src/pages/sandbox/ConsolePanel.svelte";
 
   let running = false;
   let output: string = "";
   let editor: EditorView;
-  let selectedVersionIndex = 0;
-  const versions = ["0.1.0"]; // TODO: fetch
+  let selectedVersionIndex = 0; // TODO: find index of last API version
+  let apiLoaded = false;
 
   let currentConsoleTab: any;
 
   let showVersionDetails = false;
-  let versionDetails: { name: string; version: string }[];
 
   async function runEditorScript() {
     running = true;
@@ -27,56 +27,27 @@
     running = false;
   }
 
-  async function fetchS4TK(version: string): Promise<string> {
-    return new Promise(async (resolve, reject) => {
-      // FIXME: cache with indexed DB, not local storage
+  async function refreshS4TK() {
+    apiLoaded = false;
 
-      const storageKey = `s4tk-api-${version}`;
-      const cached = localStorage.getItem(storageKey);
+    const version = S4TK_API_VERSIONS[selectedVersionIndex];
 
-      if (cached) {
-        versionDetails = JSON.parse(
-          localStorage.getItem(`s4tk-api-details-${version}`)
+    loadApi(version)
+      .then((result) => {
+        apiLoaded = result;
+      })
+      .catch((err) => {
+        alert(
+          `Something went wrong while fetching API v${version}. Reload the page to try again.`
         );
-        resolve(cached);
-        return;
-      }
 
-      console.log("Fetching...");
-
-      fetch(
-        `https://raw.githubusercontent.com/sims4toolkit/browserfied/version/${version}/build/s4tk.specs.json`
-      )
-        .then((res) => {
-          res.text().then((text) => {
-            localStorage.setItem(`s4tk-api-details-${version}`, text);
-            versionDetails = JSON.parse(
-              localStorage.getItem(`s4tk-api-details-${version}`)
-            );
-          });
-        })
-        .catch((err) => {
-          reject(err);
-        });
-
-      fetch(
-        `https://raw.githubusercontent.com/sims4toolkit/browserfied/version/${version}/build/s4tk.min.js`
-      )
-        .then((res) => {
-          res.text().then((text) => {
-            localStorage.setItem(storageKey, text);
-            resolve(text);
-          });
-        })
-        .catch((err) => {
-          reject(err);
-        });
-    });
+        console.error(err);
+      });
   }
 
   $: {
-    // FIXME: reload page when new version selected
-    fetchS4TK(versions[selectedVersionIndex]).then((s4tk) => eval(s4tk));
+    selectedVersionIndex;
+    refreshS4TK();
   }
 </script>
 
@@ -87,14 +58,14 @@
 <div class="fixed top-10 left-0 right-0 bottom-0 dark:bg-gray-900">
   <VerticalSplitView leftPanelName="File Manager">
     <div slot="left" class="p-2 absolute left-0 right-0 top-0 bottom-0">
-      <div class="flex row items-center justify-between gap-2">
+      <div class="flex row items-center justify-between gap-2 mb-2">
         <p class="text-sm">API Version:</p>
         <select
           name="s4tk-version-select"
           bind:value={selectedVersionIndex}
           class="block w-full h-6 min-w-fit pl-2 pr-8 rounded text-sm bg-transparent border border-gray-600 dark:border-gray-700"
         >
-          {#each versions as version, key (key)}
+          {#each S4TK_API_VERSIONS as version, key (key)}
             <option value={key}>{version}</option>
           {/each}
         </select>
@@ -103,6 +74,11 @@
           on:click={() => (showVersionDetails = true)}>Details</button
         >
       </div>
+      {#if apiLoaded}
+        <p class="text-subtle text-xs">API loaded successfully</p>
+      {:else}
+        <p class="text-xs text-red-700 dark:text-red-500">API has not loaded</p>
+      {/if}
     </div>
     <div
       slot="right"
@@ -133,12 +109,12 @@
 
 {#if showVersionDetails}
   <Modal
-    title="API Version {versions[selectedVersionIndex]}"
+    title="API Version {S4TK_API_VERSIONS[selectedVersionIndex]}"
     onClose={() => (showVersionDetails = false)}
   >
     <div>
       <ul>
-        {#each versionDetails as vd, key (key)}
+        {#each S4TK_API_STATE.specs as vd, key (key)}
           <li class="text-sm mb-1">
             {vd.name}:
             <a
