@@ -1,8 +1,18 @@
 <script lang="ts">
   import { link, location } from "svelte-spa-router";
+  import Settings from "src/lib/settings";
 
   $: homeIcon = $location === "/" ? "home" : "home-outline";
   $: helpIcon = $location === "/help" ? "help-circle" : "help-circle-outline";
+
+  // redundant so icon can react without accessing settings
+  let isLightTheme = Settings.isLightTheme;
+  $: themeIcon = isLightTheme ? "sunny" : "moon";
+
+  function toggleTheme() {
+    Settings.isLightTheme = !Settings.isLightTheme;
+    isLightTheme = Settings.isLightTheme;
+  }
 </script>
 
 <nav
@@ -37,6 +47,13 @@
         class="svg tint-on-hover h-6"
       />
     </a>
+    <button on:click={toggleTheme}>
+      <img
+        src="./assets/{themeIcon}-outline.svg"
+        alt="Theme"
+        class="svg tint-on-hover h-5"
+      />
+    </button>
   </div>
 </nav>
 

@@ -5,45 +5,56 @@ import { tags as t } from "@lezer/highlight";
 
 // Using https://github.com/one-dark/vscode-one-dark-theme/ as reference for the colors
 
-const chalky = "#e5c07b",
-  coral = "#e06c75",
-  cyan = "#56b6c2",
-  invalid = "#ffffff",
+// const chalky = "#e5c07b",
+//   coral = "#e06c75",
+//   cyan = "#56b6c2",
+//   invalid = "#ffffff",
+//   ivory = "#abb2bf",
+//   stone = "#7d8799", // Brightened compared to original to increase contrast
+//   malibu = "#61afef",
+//   sage = "#98c379",
+//   whiskey = "#d19a66",
+//   violet = "#c678dd",
+//   darkBackground = "#21252b",
+//   highlightBackground = "#2c313a",
+//   background = "#282c34",
+//   tooltipBackground = "#353a42",
+//   selection = "#3E4451",
+//   cursor = "#528bff";
+
+const invalid = "#0000000",
   ivory = "#abb2bf",
-  stone = "#7d8799", // Brightened compared to original to increase contrast
-  malibu = "#61afef",
-  sage = "#98c379",
-  whiskey = "#d19a66",
-  violet = "#c678dd",
-  darkBackground = "#21252b",
-  highlightBackground = "#2c313a",
-  background = "#282c34",
-  tooltipBackground = "#353a42",
-  selection = "#3E4451",
-  cursor = "#528bff"
+  stone = "#778191",
+  darkGray = "#121212",
+  green = "#34a312",
+  purple = "#a807ed",
+  blue = "#006eff",
+  red = "#e63c5b",
+  highlightBackground = "#ebebeb",
+  background = "#ebedf0",
+  selection = "#c7dded",
+  selectionTransparent = "#c7ddedf9",
+  cursor = "#528bff";
 
 /// The colors used in the theme, as CSS color strings.
 export const color = {
-  chalky,
-  coral,
-  cyan,
   invalid,
   ivory,
   stone,
-  malibu,
-  sage,
-  whiskey,
-  violet,
-  darkBackground,
+  darkGray,
+  green,
+  purple,
+  blue,
+  red,
   highlightBackground,
   background,
-  tooltipBackground,
+  selectionTransparent,
   selection,
   cursor
 }
 
 /// The editor theme styles for One Dark.
-export const darkTheme = EditorView.theme({
+export const lightTheme = EditorView.theme({
   "&": {
     color: ivory,
     // backgroundColor: background
@@ -56,7 +67,7 @@ export const darkTheme = EditorView.theme({
   ".cm-cursor, .cm-dropCursor": { borderLeftColor: cursor },
   "&.cm-focused .cm-selectionBackground, .cm-selectionBackground, .cm-content ::selection": { backgroundColor: selection },
 
-  ".cm-panels": { backgroundColor: darkBackground, color: ivory },
+  ".cm-panels": { color: ivory },
   ".cm-panels.cm-panels-top": { borderBottom: "2px solid black" },
   ".cm-panels.cm-panels-bottom": { borderTop: "2px solid black" },
 
@@ -94,15 +105,15 @@ export const darkTheme = EditorView.theme({
 
   ".cm-tooltip": {
     border: "none",
-    backgroundColor: tooltipBackground
+    backgroundColor: background
   },
   ".cm-tooltip .cm-tooltip-arrow:before": {
     borderTopColor: "transparent",
     borderBottomColor: "transparent"
   },
   ".cm-tooltip .cm-tooltip-arrow:after": {
-    borderTopColor: tooltipBackground,
-    borderBottomColor: tooltipBackground
+    borderTopColor: background,
+    borderBottomColor: background
   },
   ".cm-tooltip-autocomplete": {
     "& > ul > li[aria-selected]": {
@@ -110,25 +121,25 @@ export const darkTheme = EditorView.theme({
       color: ivory
     }
   }
-}, { dark: true })
+}, { dark: false })
 
 /// The highlighting style for code in the One Dark theme.
-export const darkHighlightStyle = HighlightStyle.define([
+export const lightHighlightStyle = HighlightStyle.define([
   {
     tag: t.keyword,
-    color: violet
+    color: blue
   },
   {
     tag: [t.name, t.deleted, t.character, t.propertyName, t.macroName],
-    color: coral
+    color: red
   },
   {
     tag: [t.function(t.variableName), t.labelName],
-    color: malibu
+    color: green
   },
   {
     tag: [t.color, t.constant(t.name), t.standard(t.name)],
-    color: whiskey
+    color: purple
   },
   {
     tag: [t.definition(t.name), t.separator],
@@ -136,11 +147,11 @@ export const darkHighlightStyle = HighlightStyle.define([
   },
   {
     tag: [t.typeName, t.className, t.number, t.changed, t.annotation, t.modifier, t.self, t.namespace],
-    color: chalky
+    color: blue
   },
   {
     tag: [t.operator, t.operatorKeyword, t.url, t.escape, t.regexp, t.link, t.special(t.string)],
-    color: cyan
+    color: purple
   },
   {
     tag: [t.meta, t.comment],
@@ -166,15 +177,15 @@ export const darkHighlightStyle = HighlightStyle.define([
   {
     tag: t.heading,
     fontWeight: "bold",
-    color: coral
+    color: red
   },
   {
     tag: [t.atom, t.bool, t.special(t.variableName)],
-    color: whiskey
+    color: purple
   },
   {
     tag: [t.processingInstruction, t.string, t.inserted],
-    color: sage
+    color: green
   },
   {
     tag: t.invalid,
@@ -184,4 +195,4 @@ export const darkHighlightStyle = HighlightStyle.define([
 
 /// Extension to enable the One Dark theme (both the editor theme and
 /// the highlight style).
-export const darkEditor: Extension = [darkTheme, syntaxHighlighting(darkHighlightStyle)]
+export const lightEditor: Extension = [lightTheme, syntaxHighlighting(lightHighlightStyle)]

@@ -1,13 +1,24 @@
 <script lang="ts">
   import type { EditorView } from "codemirror";
-  import { onMount } from "svelte";
-  import { newEditor } from "src/lib/editor";
+  import { onDestroy, onMount } from "svelte";
+  import { newEditor, updateTheme } from "src/lib/editor";
+  import Settings, { SettingsSubscriptionManager } from "src/lib/settings";
 
   export let editor: EditorView = null;
   let editorElement: HTMLDivElement;
 
+  const subscriptions = [
+    SettingsSubscriptionManager.subscribe("isLightTheme", (isLightTheme) => {
+      updateTheme(editor, !isLightTheme);
+    }),
+  ];
+
   onMount(() => {
-    editor = newEditor(editorElement, true);
+    editor = newEditor(editorElement, !Settings.isLightTheme);
+  });
+
+  onDestroy(() => {
+    subscriptions.forEach((unsub) => unsub());
   });
 
   /*

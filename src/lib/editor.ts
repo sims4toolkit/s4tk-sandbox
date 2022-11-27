@@ -1,21 +1,10 @@
 import { EditorView, keymap } from "@codemirror/view";
 import { Compartment, EditorState } from "@codemirror/state";
-// import { EditorState, basicSetup } from "@codemirror/basic-setup";
-// import { xml } from "@codemirror/lang-xml";
 import { indentWithTab } from "@codemirror/commands";
 import { basicSetup } from "codemirror";
 import { javascript } from "@codemirror/lang-javascript";
-// import darkDefault from './themes/darkDefault';
-// import lightDefault from './themes/lightDefault';
-// import type { Theme } from '../../types/themes';
-import { oneDark } from "src/lib/editor-theme-dark";
-
-/*
-NOTE: I know this is one of the most important and prominent rendering processes of the app, so it
-may seem a little strange that it is completely managed by the main process rather than by the 
-front end. The reasoning for this is because Codemirror is a node package, and the renderer/front
-end does not have access to node modules for security reasons.
-*/
+import { darkEditor } from "src/lib/editor-theme-dark";
+import { lightEditor } from "src/lib/editor-theme-light";
 
 const themeCompartment = new Compartment();
 
@@ -33,7 +22,7 @@ export function newEditor(parent: HTMLElement, isDarkTheme: boolean): EditorView
         basicSetup,
         keymap.of([indentWithTab]),
         javascript(),
-        themeCompartment.of(isDarkTheme ? oneDark : oneDark)
+        themeCompartment.of(isDarkTheme ? darkEditor : lightEditor)
       ]
     })
   });
@@ -62,7 +51,7 @@ export function updateContents(editor: EditorView, contents: string) {
  * @param isDarkTheme Whether or not the theme is dark
  */
 export function updateTheme(editor: EditorView, isDarkTheme: boolean) {
-  const theme = isDarkTheme ? oneDark : oneDark;
+  const theme = isDarkTheme ? darkEditor : lightEditor;
   editor.dispatch({
     effects: themeCompartment.reconfigure(theme)
   });
