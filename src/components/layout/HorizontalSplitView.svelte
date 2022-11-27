@@ -77,6 +77,7 @@
   on:mousemove={handleMouseMove}
   on:mousedown={handleMouseDown}
   on:mouseup={handleMouseUp}
+  class:select-none={isResizing}
 >
   <div
     bind:this={topPanel}

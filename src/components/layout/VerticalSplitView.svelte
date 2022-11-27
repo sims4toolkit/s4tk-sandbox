@@ -74,6 +74,7 @@
   bind:this={panelWrapper}
   class="absolute top-0 bottom-0 left-0 right-0 whitespace-nowrap"
   class:cursor-col-resize={isHoveringResizer}
+  class:select-none={isResizing}
   on:mousemove={handleMouseMove}
   on:mousedown={handleMouseDown}
   on:mouseup={handleMouseUp}
