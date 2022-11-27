@@ -17,7 +17,7 @@ const invalid = "#0000000",
   selectionTransparent = "#c7ddedf9",
   cursor = "#528bff",
   teal = "#226b53",
-  orange = "#d97c2b";
+  orange = "#e87307";
 
 /// The colors used in the theme, as CSS color strings.
 export const color = {
@@ -113,7 +113,7 @@ export const lightHighlightStyle = HighlightStyle.define([
     color: purple
   },
   {
-    tag: [t.deleted, t.macroName, t.propertyName],
+    tag: [t.deleted, t.macroName, t.propertyName, t.definition(t.name)],
     color: red
   },
   {
@@ -125,7 +125,7 @@ export const lightHighlightStyle = HighlightStyle.define([
     color: orange
   },
   {
-    tag: [t.definition(t.name), t.separator, t.character, t.name],
+    tag: [t.separator, t.character, t.name],
     color: darkGray
   },
   {
