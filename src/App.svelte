@@ -1,12 +1,13 @@
 <script lang="ts">
   import Router from "svelte-spa-router";
-  import Footer from "./components/Footer.svelte";
-  import Navbar from "./components/Navbar.svelte";
-  import HomePage from "./pages/HomePage.svelte";
-  import NotFoundPage from "./pages/NotFoundPage.svelte";
+  import Navbar from "src/components/Navbar.svelte";
+  import HomePage from "src/pages/HomePage.svelte";
+  import NotFoundPage from "src/pages/NotFoundPage.svelte";
+  import SandboxPage from "src/pages/SandboxPage.svelte";
 
   const routes = {
     "/": HomePage,
+    "/code": SandboxPage,
     "*": NotFoundPage,
   };
 </script>
@@ -15,4 +16,3 @@
 <main class="min-h-screen flex flex-col">
   <Router {routes} restoreScrollState={true} />
 </main>
-<!-- <Footer /> -->

@@ -1,5 +1,9 @@
 <script lang="ts">
-  // TODO
+  import { link, location } from "svelte-spa-router";
+
+  $: homeIcon = $location === "/" ? "home" : "home-outline";
+  $: codeIcon = $location === "/code" ? "code-slash" : "code-slash-outline";
+  $: helpIcon = $location === "/help" ? "help-circle" : "help-circle-outline";
 </script>
 
 <nav
@@ -13,16 +17,23 @@
     <h2 class="font-bold">S4TK Sandbox</h2>
   </a>
   <div class="flex gap-3 items-center">
-    <a href="/#">
+    <a href="/" use:link>
       <img
-        src="./assets/home-outline.svg"
+        src="./assets/{homeIcon}.svg"
         alt="Home"
         class="svg tint-on-hover h-5"
       />
     </a>
-    <a href="/#/help">
+    <a href="/code" use:link class="border">
       <img
-        src="./assets/help-circle-outline.svg"
+        src="./assets/{codeIcon}.svg"
+        alt="Code"
+        class="svg tint-on-hover h-6"
+      />
+    </a>
+    <a href="/help" use:link>
+      <img
+        src="./assets/{helpIcon}.svg"
         alt="Help"
         class="svg tint-on-hover h-6"
       />
