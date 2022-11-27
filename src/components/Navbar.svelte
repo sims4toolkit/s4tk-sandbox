@@ -1,8 +1,5 @@
 <script lang="ts">
-  import { link, location } from "svelte-spa-router";
   import Settings from "src/lib/settings";
-
-  $: homeIcon = $location === "/" ? "home" : "home-outline";
 
   // redundant so icon can react without accessing settings
   let isLightTheme = Settings.isLightTheme;
@@ -25,13 +22,6 @@
     <h2 class="font-bold">S4TK Sandbox</h2>
   </a>
   <div class="flex gap-3 items-center">
-    <a href="/" use:link>
-      <img
-        src="./assets/{homeIcon}.svg"
-        alt="Home"
-        class="svg tint-on-hover h-5"
-      />
-    </a>
     <a href="http://sims4toolkit.com/#/docs" target="_blank">
       <img
         src="./assets/book-outline.svg"

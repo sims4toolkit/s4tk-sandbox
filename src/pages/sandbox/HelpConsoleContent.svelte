@@ -33,8 +33,8 @@
   <div>
     <h4 class="text-sm font-bold mb-1">Output</h4>
     <p class="text-subtle text-sm">
-      The <code>Sandbox.output(...args: string[]): void</code> function can be used
-      to write output to the sandbox console.
+      The <code>Sandbox.output(...args: string[])</code> function can be used to
+      write output to the sandbox console.
     </p>
   </div>
   <div>
@@ -55,9 +55,7 @@
         >Sandbox.import(filename: string): Buffer</code
       >
       function. To save files to your computer, use the
-      <code
-        >Sandbox.download(filename: string, data: string | Buffer): void</code
-      >
+      <code>Sandbox.download(filename: string, data: string | Buffer)</code>
       function.
     </p>
   </div>
