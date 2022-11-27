@@ -46,6 +46,8 @@ export async function loadApi(version: string): Promise<boolean> {
 
 async function fetchAndCacheApi(version: string): Promise<string> {
   return new Promise(async (resolve, reject) => {
+    console.log(`Fetching API version ${version}.`);
+
     const url = `https://raw.githubusercontent.com/sims4toolkit/browserfied/version/${version}/build/s4tk.min.js`;
 
     fetch(url)
@@ -64,6 +66,8 @@ async function fetchAndCacheApi(version: string): Promise<string> {
 
 async function fetchAndCacheApiSpecs(version: string): Promise<string> {
   return new Promise(async (resolve, reject) => {
+    console.log(`Fetching specs for API version ${version}.`);
+
     const url = `https://raw.githubusercontent.com/sims4toolkit/browserfied/version/${version}/build/s4tk.specs.json`;
 
     fetch(url)
