@@ -160,12 +160,21 @@
     onClose={() => (showVersionDetails = false)}
   >
     <div>
-      {#each versionDetails as vd, key (key)}
-        <p class="text-sm">
-          <span class="text-primary">{vd.name}</span>:
-          <span class="monospace">{vd.version}</span>
-        </p>
-      {/each}
+      <ul>
+        {#each versionDetails as vd, key (key)}
+          <li class="text-sm mb-1">
+            {vd.name}:
+            <a
+              class="monospace text-secondary"
+              href="https://sims4toolkit.com/#/docs/{vd.name.replace(
+                '@s4tk/',
+                ''
+              )}/{vd.version}"
+              target="_blank">{vd.version}</a
+            >
+          </li>
+        {/each}
+      </ul>
     </div>
   </Modal>
 {/if}
