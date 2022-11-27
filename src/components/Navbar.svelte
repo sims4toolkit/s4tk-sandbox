@@ -3,7 +3,6 @@
   import Settings from "src/lib/settings";
 
   $: homeIcon = $location === "/" ? "home" : "home-outline";
-  $: helpIcon = $location === "/help" ? "help-circle" : "help-circle-outline";
 
   // redundant so icon can react without accessing settings
   let isLightTheme = Settings.isLightTheme;
@@ -38,13 +37,6 @@
         src="./assets/book-outline.svg"
         alt="Docs"
         class="svg tint-on-hover h-5"
-      />
-    </a>
-    <a href="/help" use:link>
-      <img
-        src="./assets/{helpIcon}.svg"
-        alt="Help"
-        class="svg tint-on-hover h-6"
       />
     </a>
     <button on:click={toggleTheme}>
