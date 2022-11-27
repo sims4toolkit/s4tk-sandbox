@@ -5,13 +5,14 @@
   import Modal from "src/components/layout/Modal.svelte";
   import VerticalSplitView from "src/components/layout/VerticalSplitView.svelte";
   import { runScript } from "src/lib/script-runner";
-  import { time_ranges_to_array } from "svelte/internal";
 
   let running = false;
   let output: string = "";
   let editor: EditorView;
   let selectedVersionIndex = 0;
   const versions = ["0.1.0"]; // TODO: fetch
+
+  const outputPlaceholder = `Calls to <span class="text-secondary">Sandbox.output(...args)</span> will be written here. For best results, keep your code synchronous.`;
 
   let showVersionDetails = false;
   let versionDetails: { name: string; version: string }[];
@@ -120,9 +121,7 @@
             {#if Boolean(output)}
               {output}
             {:else}
-              Calls to <span class="text-secondary"
-                >Sandbox.output(...args)</span
-              > will be written here. For best results, keep your code synchronous.
+              {@html outputPlaceholder}
             {/if}
           </p>
         </div>
