@@ -26,35 +26,42 @@
   <title>Sandbox</title>
 </svelte:head>
 
-<div class="fixed top-10 left-0 right-0 bottom-0">
+<div class="fixed top-10 left-0 right-0 bottom-0 dark:bg-gray-950">
   <VerticalSplitView leftPanelName="Files">
-    <div slot="left" class="dark:bg-gray-700 h-full">Files Content</div>
-    <HorizontalSplitView bottomPanelName="Output" slot="right">
-      <div class="p-4" slot="top">
-        <textarea
-          bind:value={sourceCode}
-          class="w-full p-4 monospace bg-gray-200 dark:bg-gray-900"
-          placeholder={placeholderText}
-        />
-      </div>
-      <div slot="bottom" class="p-2">
-        <h4
-          class="text-sm text-subtle underline underline-offset-4 select-none"
-        >
-          Output
-        </h4>
-        <p class="text-sm monospace mt-2">
-          {#if Boolean(output)}
-            {output}
-          {:else}
-            Use the <span
-              class="text-accent-primary-light dark:text-accent-primary-dark"
-              >output()</span
-            > function to show output.
-          {/if}
-        </p>
-      </div>
-    </HorizontalSplitView>
+    <div slot="left" class="absolute left-0 right-0 top-0 bottom-0">
+      Files Content
+    </div>
+    <div
+      slot="right"
+      class="absolute left-0 right-0 top-0 bottom-0 dark:bg-gray-900"
+    >
+      <HorizontalSplitView bottomPanelName="Output">
+        <div class="p-4" slot="top">
+          <textarea
+            bind:value={sourceCode}
+            class="w-full p-4 monospace bg-gray-200 dark:bg-gray-900"
+            placeholder={placeholderText}
+          />
+        </div>
+        <div slot="bottom" class="p-2">
+          <h4
+            class="text-sm text-subtle underline underline-offset-4 select-none"
+          >
+            Output
+          </h4>
+          <p class="text-sm monospace mt-2">
+            {#if Boolean(output)}
+              {output}
+            {:else}
+              Use the <span
+                class="text-accent-primary-light dark:text-accent-primary-dark"
+                >output()</span
+              > function to show output.
+            {/if}
+          </p>
+        </div>
+      </HorizontalSplitView>
+    </div>
   </VerticalSplitView>
 </div>
 

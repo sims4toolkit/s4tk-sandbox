@@ -1,7 +1,7 @@
 <script lang="ts">
   import { onMount } from "svelte";
 
-  const MIN_WIDTH = 50;
+  const MIN_WIDTH = 60;
   const COLLAPSED_WIDTH = 30;
 
   export let leftPanelName: string;
@@ -66,7 +66,7 @@
     isCollapsed = false;
     const wrapperRect = panelWrapper.getBoundingClientRect();
     leftPanel.style.width = `${MIN_WIDTH + 10}px`;
-    rightPanel.style.width = `${wrapperRect.width - MIN_WIDTH + 10}px`;
+    rightPanel.style.width = `${wrapperRect.width - MIN_WIDTH - 10}px`;
   }
 </script>
 
@@ -83,7 +83,7 @@
     hidden={isCollapsed}
     class="absolute top-0 bottom-0 left-0 overflow-hidden border-r-2"
     class:border-r-gray-600={!isHoveringResizer}
-    class:dark:border-r-gray-900={!isHoveringResizer}
+    class:dark:border-r-gray-800={!isHoveringResizer}
     class:border-r-accent-primary-light={isHoveringResizer}
     class:dark:border-r-accent-primary-dark={isHoveringResizer}
   >
@@ -92,7 +92,7 @@
   <button
     bind:this={collapsedLeftPanel}
     hidden={!isCollapsed}
-    class="absolute top-0 bottom-0 left-0 justify-center pt-2 border-r-2 border-r-gray-600 dark:border-r-gray-900 select-none"
+    class="absolute top-0 bottom-0 left-0 justify-center pt-2 border-r-2 border-r-gray-600 dark:border-r-gray-800 select-none"
     class:flex={isCollapsed}
     on:click={handleCollapsedClick}
   >
