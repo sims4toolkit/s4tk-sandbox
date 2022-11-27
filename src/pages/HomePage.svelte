@@ -31,8 +31,13 @@
   })();
 </script>
 
-<!-- FIXME: how to make full screen? -->
-<div class="min-h-screen w-full flex items-center justify-center">
-  <a href="#/code">Go to Sandbox</a>
-</div>
+<svelte:head>
+  <title>Sandbox</title>
+</svelte:head>
+
+<section class="pt-10 flex-1 w-full flex justify-center">
+  <div class="w-full xl:max-w-screen-xl px-4 flex flex-col justify-center">
+    <a href="#/code">Go to Sandbox</a>
+  </div>
+</section>
 <Footer />

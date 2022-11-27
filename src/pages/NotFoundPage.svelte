@@ -1,5 +1,6 @@
 <script>
   import SectionHeader from "src/components/elements/SectionHeader.svelte";
+  import Footer from "src/components/Footer.svelte";
 </script>
 
 <svelte:head>
@@ -20,3 +21,4 @@
     <p class="text-subtle text-xs">Error 404</p>
   </div>
 </section>
+<Footer />

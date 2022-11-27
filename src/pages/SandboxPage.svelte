@@ -22,6 +22,10 @@
   }
 </script>
 
+<svelte:head>
+  <title>Sandbox</title>
+</svelte:head>
+
 <VerticalSplitView leftPanelName="Files">
   <div slot="left" class="dark:bg-gray-700 h-full">Files Content</div>
   <HorizontalSplitView bottomPanelName="Output" slot="right">
