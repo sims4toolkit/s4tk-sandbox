@@ -6,6 +6,10 @@
   let output: string = "";
   const placeholderText = "const { Package } = window.S4TK.models;";
 
+  let selectedVersionIndex = 0;
+
+  const versions = ["0.1.0"];
+
   //@ts-ignore
   window.Sandbox = {
     output: (content: string) => (output += content + "\n"),
@@ -45,10 +49,10 @@
     });
   }
 
-  (async () => {
-    const s4tkApi = await fetchS4TK("0.1.0");
-    eval(s4tkApi);
-  })();
+  $: {
+    // FIXME: reload page when new version selected
+    fetchS4TK(versions[selectedVersionIndex]).then((s4tk) => eval(s4tk));
+  }
 </script>
 
 <svelte:head>
@@ -57,18 +61,33 @@
 
 <div class="fixed top-10 left-0 right-0 bottom-0 dark:bg-gray-950">
   <VerticalSplitView leftPanelName="File Manager">
-    <div slot="left" class="absolute left-0 right-0 top-0 bottom-0">
-      Files Content
+    <div slot="left" class="p-2 absolute left-0 right-0 top-0 bottom-0">
+      <div class="flex row items-center justify-between gap-2">
+        <p class="text-sm">API Version:</p>
+        <select
+          name="s4tk-version-select"
+          bind:value={selectedVersionIndex}
+          class="block w-full h-6 min-w-fit pl-2 pr-8 rounded text-sm bg-transparent border border-gray-600 dark:border-gray-700"
+        >
+          {#each versions as version, key (key)}
+            <option value={key}>{version}</option>
+          {/each}
+        </select>
+        <button
+          class="text-accent-secondary-light dark:text-accent-secondary-dark underline underline-offset-2 text-sm"
+          >Details</button
+        >
+      </div>
     </div>
     <div
       slot="right"
       class="absolute left-0 right-0 top-0 bottom-0 dark:bg-gray-900"
     >
       <HorizontalSplitView bottomPanelName="Output">
-        <div class="p-4" slot="top">
+        <div slot="top">
           <textarea
             bind:value={sourceCode}
-            class="w-full p-4 monospace bg-gray-200 dark:bg-gray-900"
+            class="w-full min-h-full p-2 monospace bg-transparent"
             placeholder={placeholderText}
           />
         </div>
