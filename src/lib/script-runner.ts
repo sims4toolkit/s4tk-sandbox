@@ -1,7 +1,7 @@
 import saveAs from "file-saver";
 import { hyphenToCamel } from "src/lib/helpers";
 
-export function runScript(script: string, output: string[]) {
+export function runScript(script: string, output: string[]): any {
   try {
     Sandbox.output = (...args: string[]) => {
       output.push(...args);
@@ -10,13 +10,14 @@ export function runScript(script: string, output: string[]) {
     Sandbox.runScript = (filename: string) => {
       const importedScript = Sandbox.import(filename).toString();
       const innerOutput: string[] = [];
-      runScript(importedScript, innerOutput);
+      const result = runScript(importedScript, innerOutput);
       output.push(...innerOutput.map(line => `[@${filename}] ${line}`));
+      return result;
     };
 
     const code = `const Buffer = window.Node.Buffer;const Sandbox = window.Sandbox;const require = Sandbox.require;${script}`;
 
-    Function(code)();
+    return Function(code)();
   } catch (err) {
     output.push(err);
   }
@@ -27,7 +28,7 @@ interface SandboxFunctions {
   import(filename: string): Buffer;
   output?(...args: string[]): void;
   require(path: string): unknown;
-  runScript?(filename: string): void;
+  runScript?(filename: string): unknown;
 }
 
 const Sandbox: SandboxFunctions = {
