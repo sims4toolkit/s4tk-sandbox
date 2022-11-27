@@ -20,7 +20,7 @@ const chalky = "#e5c07b",
   background = "#282c34",
   tooltipBackground = "#353a42",
   selection = "#3E4451",
-  cursor = "#528bff"
+  cursor = "#528bff";
 
 /// The colors used in the theme, as CSS color strings.
 export const color = {
@@ -40,7 +40,7 @@ export const color = {
   tooltipBackground,
   selection,
   cursor
-}
+};
 
 /// The editor theme styles for One Dark.
 export const darkTheme = EditorView.theme({
@@ -110,7 +110,7 @@ export const darkTheme = EditorView.theme({
       color: ivory
     }
   }
-}, { dark: true })
+}, { dark: true });
 
 /// The highlighting style for code in the One Dark theme.
 export const darkHighlightStyle = HighlightStyle.define([
@@ -122,10 +122,6 @@ export const darkHighlightStyle = HighlightStyle.define([
     tag: [t.deleted, t.macroName, t.propertyName],
     color: coral
   },
-  // {
-  //   tag: [t.name, ],
-  //   color: whiskey
-  // },
   {
     tag: [t.function(t.variableName), t.labelName],
     color: malibu
@@ -184,8 +180,8 @@ export const darkHighlightStyle = HighlightStyle.define([
     tag: t.invalid,
     color: invalid
   },
-])
+]);
 
 /// Extension to enable the One Dark theme (both the editor theme and
 /// the highlight style).
-export const darkEditor: Extension = [darkTheme, syntaxHighlighting(darkHighlightStyle)]
+export const darkEditor: Extension = [darkTheme, syntaxHighlighting(darkHighlightStyle)];
