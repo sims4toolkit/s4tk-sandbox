@@ -18,19 +18,19 @@
 
   const buttonData: FloatingActionButtonData[] = [
     {
-      color: "Azure",
+      color: "Purple",
       title: "Download",
       icon: "download",
       onClick: () => {
-        alert("Download");
+        alert("download");
       },
     },
     {
-      color: "Purple",
-      title: "Rename",
-      icon: "text-outline",
+      color: "Azure",
+      title: "Save",
+      icon: "save-outline",
       onClick: () => {
-        alert("Rename");
+        alert("save");
       },
     },
     {
