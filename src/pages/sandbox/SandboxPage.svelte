@@ -54,11 +54,13 @@
   async function downloadEditorScript() {
     saveEditorScript();
 
-    const filename = currentScriptName.endsWith(".js")
-      ? currentScriptName
-      : `${currentScriptName}.js`;
+    const filename = (
+      currentScriptName.endsWith(".js")
+        ? currentScriptName
+        : `${currentScriptName}.js`
+    ).replace(/[^a-z0-9\.-]/gi, "_");
 
-    saveAs(currentScriptContent, filename);
+    saveAs(new Blob([currentScriptContent]), filename);
   }
 
   async function runEditorScript() {

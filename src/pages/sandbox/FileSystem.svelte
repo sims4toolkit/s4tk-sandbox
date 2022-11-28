@@ -19,7 +19,7 @@
 
     if (!Settings.hasSeenExampleScript) {
       await scriptFileManager.tryAdd(
-        "Hello World",
+        "helloWorld",
         `const { Package, StringTableResource } = require("@s4tk/models");\nconst { BinaryResourceType } = require("@s4tk/models/enums");\nconst { fnv64 } = require("@s4tk/hashing");\n\nconst pkg = new Package();\nconst stbl = new StringTableResource();\nstbl.addAndHash("Hello world");\n\npkg.add(\n  {\n    type: BinaryResourceType.StringTable,\n    group: 0x80000000,\n    instance: fnv64("creator:SampleStringTable")\n  },\n  stbl\n);\n\nSandbox.output(JSON.stringify(stbl.toJsonObject()));\nSandbox.download("Sample.package", pkg.getBuffer());\n`
       );
       Settings.hasSeenExampleScript = true;
