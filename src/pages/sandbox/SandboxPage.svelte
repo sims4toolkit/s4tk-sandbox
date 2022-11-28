@@ -10,50 +10,69 @@
   import ApiVersionSwitcher from "src/pages/sandbox/ApiVersionSwitcher.svelte";
   import FileSystem from "src/pages/sandbox/FileSystem.svelte";
   import FloatingActionButtonGroup from "src/components/elements/FloatingActionButtonGroup.svelte";
+  import FileManager from "src/lib/file-manager";
+  import { saveAs } from "file-saver";
 
   let running = false;
   let output: string = "";
   let editor: EditorView;
   let currentConsoleTab: any;
 
+  let currentScriptName: string;
+  let currentScriptContent: string;
+
   const buttonData: FloatingActionButtonData[] = [
     {
       color: "Purple",
       title: "Download",
       icon: "download",
-      onClick: () => {
-        alert("download");
-      },
+      onClick: downloadEditorScript,
     },
     {
       color: "Azure",
       title: "Save",
       icon: "save-outline",
-      onClick: () => {
-        alert("save");
-      },
+      onClick: saveEditorScript,
     },
     {
       color: "Green",
       title: "Run",
       icon: "play",
       disabled: running,
-      onClick: () => {
-        runEditorScript();
-      },
+      onClick: runEditorScript,
     },
   ];
 
+  function saveEditorScript() {
+    const fm = FileManager.getInstance("script");
+    currentScriptContent = editor.state.doc.toJSON().join("\n");
+    fm.setFileContent(currentScriptName, currentScriptContent);
+  }
+
+  async function downloadEditorScript() {
+    saveEditorScript();
+
+    const filename = currentScriptName.endsWith(".js")
+      ? currentScriptName
+      : `${currentScriptName}.js`;
+
+    saveAs(currentScriptContent, filename);
+  }
+
   async function runEditorScript() {
+    saveEditorScript();
     running = true;
     output = "Running...";
     const outputLines: string[] = [];
-    runScript(editor.state.doc.toJSON().join("\n"), outputLines);
+    runScript(currentScriptContent, outputLines);
     output = outputLines.join("\n");
     running = false;
   }
 
-  function handleScriptLoaded(content: string) {
+  function handleScriptLoaded(filename: string, content: string) {
+    saveEditorScript();
+    currentScriptName = filename;
+    currentScriptContent = content;
     updateEditorContent(editor, content);
   }
 </script>
@@ -74,7 +93,7 @@
     >
       <HorizontalSplitView bottomPanelName={currentConsoleTab}>
         <div slot="top">
-          <TextEditor bind:editor />
+          <TextEditor bind:filename={currentScriptName} bind:editor />
         </div>
         <ConsolePanel
           slot="bottom"
@@ -85,14 +104,5 @@
     </div>
   </VerticalSplitView>
 </div>
-
-<!-- <button
-  on:click={runEditorScript}
-  title="Run"
-  class="fixed right-4 bottom-4 h-10 w-10 flex items-center justify-center rounded-full bg-secondary drop-shadow-md z-10"
-  disabled={running}
->
-  <img src="./assets/play.svg" class="svg-invert h-6" alt=">" />
-</button> -->
 
 <FloatingActionButtonGroup {buttonData} />

@@ -3,7 +3,9 @@
   import FileList from "src/pages/sandbox/FileList.svelte";
   import { onMount } from "svelte";
 
-  export let onScriptLoaded: (content: string) => void;
+  export let onScriptLoaded: (filename: string, content: string) => void;
+
+  let currentScriptName: string;
 
   let managersInitialized = false;
   let scriptFileManager: FileManager;
@@ -13,11 +15,15 @@
     scriptFileManager = await FileManager.initialize("script");
     mediaFileManager = await FileManager.initialize("media");
     managersInitialized = true;
+
+    const firstFilename = scriptFileManager.getFirstFilename();
+    if (firstFilename) handleScriptFileClick(firstFilename);
   });
 
   async function handleScriptFileClick(filename: string) {
+    currentScriptName = filename;
     const content = await scriptFileManager.getFileContent(filename);
-    onScriptLoaded(content);
+    onScriptLoaded(filename, content);
   }
 
   async function handleMediaFileClick(filename: string) {
@@ -29,6 +35,7 @@
   {#if managersInitialized}
     <FileList
       expanded={true}
+      bind:highlightedFilename={currentScriptName}
       title="Scripts"
       fileManager={scriptFileManager}
       onFileClick={handleScriptFileClick}

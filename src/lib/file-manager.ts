@@ -48,6 +48,10 @@ export default class FileManager {
     });
   }
 
+  getFirstFilename(): string {
+    return this._filenames.size === 0 ? undefined : this.filenames[0];
+  }
+
   hasFile(filename: string): boolean {
     return this._filenames.has(filename);
   }

@@ -2,6 +2,7 @@
   import type FileManager from "src/lib/file-manager";
 
   export let expanded = false;
+  export let highlightedFilename: string = null;
   export let title: string;
   export let fileManager: FileManager;
   export let onFileClick: (filename: string) => void;
@@ -39,7 +40,7 @@
       }
 
       checkedFilenames = checkedFilenames;
-    } else {
+    } else if (filename !== highlightedFilename) {
       onFileClick(filename);
     }
   }
@@ -91,7 +92,7 @@
 
 <div>
   <div
-    class="px-2 h-8 flex items-center gap-4 justify-between w-full bg-gray-300 dark:bg-gray-950 min-w-fit"
+    class="px-2 h-8 flex items-center gap-4 justify-between w-full bg-gray-400 dark:bg-gray-950 min-w-fit"
   >
     <button
       class="flex items-center gap-2 w-full min-w-fit"
@@ -133,7 +134,9 @@
     {:else}
       {#each filenames as filename, key (key)}
         <button
-          class="pl-8 h-8 flex items-center gap-2 w-full hover:bg-gray-200 hover:dark:bg-gray-800"
+          class="pl-8 h-8 flex items-center gap-2 w-full hover:bg-gray-300 hover:dark:bg-gray-700"
+          class:bg-gray-200={highlightedFilename === filename}
+          class:dark:bg-gray-800={highlightedFilename === filename}
           on:click={() => handleClick(filename)}
         >
           {#if isEditing}
