@@ -74,7 +74,7 @@
     if (fm.hasFile(currentScriptName)) saveEditorScript();
     currentScriptName = filename;
     currentScriptContent = content;
-    updateEditorContent(editor, content);
+    if (content != undefined) updateEditorContent(editor, content);
   }
 </script>
 

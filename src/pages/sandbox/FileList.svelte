@@ -6,6 +6,7 @@
   export let title: string;
   export let fileManager: FileManager;
   export let onFileClick: (filename: string) => void;
+  export let onFilesDeleted: (filenames: string[]) => void = () => {};
 
   let isEditing = false;
   let checkedFilenames = new Set<string>();
@@ -28,6 +29,7 @@
     } else {
       await fileManager.tryAdd(filename, "");
       filenames = fileManager.filenames;
+      onFileClick(filename);
     }
   }
 
@@ -57,6 +59,7 @@
     if (confirm(message)) {
       await fileManager.tryDelete(...toDelete);
       filenames = fileManager.filenames;
+      onFilesDeleted(toDelete);
     }
 
     isEditing = false;

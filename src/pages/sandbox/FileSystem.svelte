@@ -26,6 +26,18 @@
     onScriptLoaded(filename, content);
   }
 
+  async function handleScriptFilesDeleted(filenames: string[]) {
+    if (filenames.includes(currentScriptName)) {
+      const firstFilename = scriptFileManager.getFirstFilename();
+      if (firstFilename) {
+        handleScriptFileClick(firstFilename);
+      } else {
+        currentScriptName = undefined;
+        onScriptLoaded(undefined, undefined);
+      }
+    }
+  }
+
   async function handleMediaFileClick(filename: string) {
     alert("media " + filename);
   }
@@ -39,6 +51,7 @@
       title="Scripts"
       fileManager={scriptFileManager}
       onFileClick={handleScriptFileClick}
+      onFilesDeleted={handleScriptFilesDeleted}
     />
     <FileList
       title="Media"
