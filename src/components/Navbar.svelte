@@ -12,7 +12,7 @@
 </script>
 
 <nav
-  class="fixed top-0 left-0 right-0 h-10 z-0 px-4 flex justify-between gap-4 bg-gray-200 dark:bg-gray-950 bottom-shadow"
+  class="fixed top-0 left-0 right-0 h-10 z-10 px-4 flex justify-between gap-4 bg-gray-200 dark:bg-gray-950 bottom-shadow"
 >
   <a
     class="flex gap-2 items-center no-underline tint-on-hover whitespace-nowrap"

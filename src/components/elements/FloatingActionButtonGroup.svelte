@@ -16,7 +16,7 @@
   }
 </script>
 
-<div class="fixed right-6 bottom-6 z-0">
+<div class="fixed right-6 bottom-6 z-10">
   {#if showTitle}
     <FloatingActionButtonTitle text={titleText} color={titleColor} {disabled} />
   {/if}
