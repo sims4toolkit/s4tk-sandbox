@@ -67,10 +67,20 @@
     saveEditorScript();
     running = true;
     output = "Running...";
-    const outputLines: string[] = [];
-    runScript(currentScriptContent, outputLines);
-    output = outputLines.join("\n");
-    running = false;
+    window.Sandbox.outputStream.length = 0;
+
+    runScript(currentScriptName)
+      .then(() => {
+        window.Sandbox.output("Script terminated successfully.");
+        output = window.Sandbox.outputStream.join("\n");
+        running = false;
+      })
+      .catch((err) => {
+        window.Sandbox.output(err);
+        window.Sandbox.output("Script terminated with error.");
+        output = window.Sandbox.outputStream.join("\n");
+        running = false;
+      });
   }
 
   function handleScriptLoaded(filename: string, content: string) {

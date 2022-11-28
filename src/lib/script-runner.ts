@@ -1,45 +1,43 @@
 import saveAs from "file-saver";
 import { hyphenToCamel } from "src/lib/helpers";
+import DatabaseService from "src/lib/database";
+import type { SandboxFunctions } from "src/window";
 
-export function runScript(script: string, output: string[]): any {
-  try {
-    Sandbox.output = (...args: string[]) => {
-      output.push(...args);
-    };
+const SCRIPT_HEADER = "const Buffer = window.Node.Buffer;const Sandbox = window.Sandbox;const require = Sandbox.require;";
 
-    Sandbox.runScript = (filename: string) => {
-      const importedScript = Sandbox.import(filename).toString();
-      const innerOutput: string[] = [];
-      const result = runScript(importedScript, innerOutput);
-      output.push(...innerOutput.map(line => `[@${filename}] ${line}`));
-      return result;
-    };
-
-    const code = `const Buffer = window.Node.Buffer;const Sandbox = window.Sandbox;const require = Sandbox.require;${script}`;
-
-    return Function(code)();
-  } catch (err) {
-    output.push(err);
-  }
+export async function runScript(filename: string): Promise<unknown> {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const userScript = await DatabaseService.getItem("script", filename);
+      if (!userScript)
+        throw new Error(`Script '${filename}' either does not exist or is empty.`);
+      const asyncFn = Function(`return new Promise(async (resolve, reject) => { (async () => { ${SCRIPT_HEADER}${userScript} })().then(r => resolve(r)).catch(err => reject(err)); });`);
+      const result = await asyncFn();
+      resolve(result);
+    } catch (err) {
+      reject(err);
+    }
+  });
 }
 
-interface SandboxFunctions {
-  download(filename: string, content: string | Buffer): Promise<void>;
-  import(filename: string): Buffer;
-  output?(...args: string[]): void;
-  require(path: string): unknown;
-  runScript?(filename: string): unknown;
-}
-
+let outputFilenamePrefix = "";
+const outputStream: string[] = [];
 const Sandbox: SandboxFunctions = {
+  outputStream,
   async download(filename: string, content: string | Buffer) {
     Sandbox.output(`Downloading '${filename}'...`);
     saveAs(new Blob([content]), filename);
   },
-  import(filename: string): Buffer {
-    Sandbox.output(`Importing '${filename}'...`);
-    // TODO: import media
-    return undefined;
+  async import(filename: string): Promise<Buffer> {
+    const b64 = await DatabaseService.getItem("media", filename);
+    return window.NodeJS.Buffer.from(b64, "base64");
+  },
+  output(...args: string[]) {
+    if (outputFilenamePrefix) {
+      outputStream.push(...args.map(arg => `[@${outputFilenamePrefix}] ${arg}`));
+    } else {
+      outputStream.push(...args);
+    }
   },
   require(path: string): unknown {
     try {
@@ -57,7 +55,6 @@ const Sandbox: SandboxFunctions = {
         if (moduleValue) {
           moduleValue = moduleValue[moduleName];
         } else {
-          //@ts-ignore
           moduleValue = window.S4TK[moduleName];
         }
 
@@ -72,7 +69,20 @@ const Sandbox: SandboxFunctions = {
       Sandbox.output(err);
     }
   },
+  async runScript(filename: string): Promise<unknown> {
+    outputFilenamePrefix = filename;
+
+    let result: any;
+
+    try {
+      result = await runScript(filename);
+    } catch (err) {
+      Sandbox.output(err);
+    }
+
+    outputFilenamePrefix = undefined;
+    return result;
+  }
 };
 
-//@ts-ignore
 window.Sandbox = Sandbox;
