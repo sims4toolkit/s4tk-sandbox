@@ -131,6 +131,7 @@ class StoredJson<T extends object> extends StoredSetting<T> {
 type SettingName = keyof UserSettings;
 
 interface UserSettings {
+  hasSeenExampleScript: boolean;
   isLightTheme: boolean;
   lastApiVersion: string;
 }
@@ -172,6 +173,9 @@ function getSettingsProxy(settingsBuilder: StoredUserSettingsBuilder): UserSetti
 }
 
 const Settings = getSettingsProxy({
+  hasSeenExampleScript: {
+    cls: StoredBoolean
+  },
   isLightTheme: {
     cls: StoredBoolean,
     callbacks: [

@@ -1,5 +1,6 @@
 <script lang="ts">
   import DatabaseService from "src/lib/database";
+  import Settings from "src/lib/settings";
 
   async function clearCache() {
     if (
@@ -31,6 +32,7 @@
       )
     ) {
       await DatabaseService.clear("script");
+      Settings.hasSeenExampleScript = false;
       location.reload();
     }
   }
