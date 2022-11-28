@@ -1,7 +1,6 @@
-import saveAs from "file-saver";
 import { hyphenToCamel } from "src/lib/helpers";
 import DatabaseService from "src/lib/database";
-import type { SandboxFunctions } from "src/window";
+import type { SandboxDownloadItem, SandboxFunctions } from "src/global";
 
 const SCRIPT_HEADER = "const Buffer = window.NodeJS.Buffer;const Sandbox = window.Sandbox;const require = Sandbox.require;";
 
@@ -22,11 +21,13 @@ export async function runScript(filename: string): Promise<unknown> {
 
 let outputFilenamePrefix = "";
 const outputStream: string[] = [];
+const downloadQueue: SandboxDownloadItem[] = [];
 const Sandbox: SandboxFunctions = {
   outputStream,
+  downloadQueue,
   async download(filename: string, content: string | Buffer) {
-    Sandbox.output(`Downloading '${filename}'...`);
-    saveAs(new Blob([content]), filename);
+    Sandbox.output(`Queueing '${filename}' for download`);
+    downloadQueue.push({ filename, content });
   },
   async import(filename: string): Promise<Buffer> {
     const b64 = await DatabaseService.getItem("media", filename);

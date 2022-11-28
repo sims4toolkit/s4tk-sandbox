@@ -1,5 +1,7 @@
 <script lang="ts">
   import type { EditorView } from "codemirror";
+  import JSZip from "jszip";
+  import { saveAs } from "file-saver";
   import type { FloatingActionButtonData } from "src/components/elements/types";
   import { updateEditorContent } from "src/lib/editor";
   import { runScript } from "src/lib/script-runner";
@@ -11,7 +13,6 @@
   import FileSystem from "src/pages/sandbox/FileSystem.svelte";
   import FloatingActionButtonGroup from "src/components/elements/FloatingActionButtonGroup.svelte";
   import FileManager from "src/lib/file-manager";
-  import { saveAs } from "file-saver";
 
   let running = false;
   let output: string = "";
@@ -21,28 +22,37 @@
   let currentScriptName: string;
   let currentScriptContent: string;
   let hasUnsavedChanges = false;
+  let buttonData: FloatingActionButtonData[];
 
-  const buttonData: FloatingActionButtonData[] = [
-    {
-      color: "Purple",
-      title: "Download",
-      icon: "download",
-      onClick: downloadEditorScript,
-    },
-    {
-      color: "Azure",
-      title: "Save",
-      icon: "save-outline",
-      onClick: saveEditorScript,
-    },
-    {
-      color: "Green",
-      title: "Run",
-      icon: "play",
-      disabled: running,
-      onClick: runEditorScript,
-    },
-  ];
+  $: {
+    running;
+    refreshButtonData();
+  }
+
+  function refreshButtonData() {
+    buttonData = [
+      {
+        color: "Purple",
+        title: "Download",
+        icon: "download",
+        onClick: downloadEditorScript,
+      },
+      {
+        color: "Azure",
+        title: "Save",
+        icon: "save-outline",
+        disabled: running,
+        onClick: saveEditorScript,
+      },
+      {
+        color: "Green",
+        title: "Run",
+        icon: "play",
+        disabled: running,
+        onClick: runEditorScript,
+      },
+    ];
+  }
 
   function saveEditorScript() {
     const fm = FileManager.getInstance("script");
@@ -53,21 +63,57 @@
 
   async function downloadEditorScript() {
     saveEditorScript();
-
-    const filename = (
-      currentScriptName.endsWith(".js")
-        ? currentScriptName
-        : `${currentScriptName}.js`
-    ).replace(/[^a-z0-9\.-]/gi, "_");
-
+    const filename = getDownloadFilename("js");
     saveAs(new Blob([currentScriptContent]), filename);
+  }
+
+  function getDownloadFilename(extension: string): string {
+    return (
+      currentScriptName.endsWith(`.${extension}`)
+        ? currentScriptName
+        : `${currentScriptName}.${extension}`
+    ).replace(/[^a-z0-9\.-]/gi, "_");
+  }
+
+  async function onScriptFinished() {
+    const { outputStream, downloadQueue } = window.Sandbox;
+
+    output = outputStream.join("\n");
+    outputStream.length = 0;
+
+    if (downloadQueue.length > 0) {
+      if (downloadQueue.length === 1) {
+        const { content, filename } = downloadQueue.pop();
+        saveAs(new Blob([content]), filename);
+      } else {
+        const zip = new JSZip();
+
+        const numDownloads = downloadQueue.length;
+        for (let i = 0; i < numDownloads; ++i) {
+          const { content, filename } = downloadQueue.pop();
+          zip.file(filename, new Blob([content]));
+        }
+
+        const zipName = getDownloadFilename("downloads.zip");
+
+        const zipBlob = await zip.generateAsync({ type: "blob" });
+
+        saveAs(zipBlob, zipName);
+      }
+    }
+
+    running = false;
   }
 
   async function runEditorScript() {
     saveEditorScript();
     running = true;
     output = "Running...";
+
+    // these should already be empty, but just in case
     window.Sandbox.outputStream.length = 0;
+    window.Sandbox.downloadQueue.length = 0;
+
     window.Sandbox.output(`=== Running script '${currentScriptName}' ===\n`);
 
     runScript(currentScriptName)
@@ -75,16 +121,16 @@
         window.Sandbox.output(
           `\n=== Script '${currentScriptName}' terminated successfully ===`
         );
-        output = window.Sandbox.outputStream.join("\n");
-        running = false;
+
+        onScriptFinished();
       })
       .catch((err) => {
-        window.Sandbox.output(err);
         window.Sandbox.output(
+          err,
           `\n=== Script '${currentScriptName}' terminated with error ===`
         );
-        output = window.Sandbox.outputStream.join("\n");
-        running = false;
+
+        onScriptFinished();
       });
   }
 
