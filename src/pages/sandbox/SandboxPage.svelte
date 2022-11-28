@@ -1,12 +1,13 @@
 <script lang="ts">
   import type { EditorView } from "codemirror";
+  import { updateEditorContent } from "src/lib/editor";
+  import { runScript } from "src/lib/script-runner";
   import TextEditor from "src/components/elements/TextEditor.svelte";
   import HorizontalSplitView from "src/components/layout/HorizontalSplitView.svelte";
   import VerticalSplitView from "src/components/layout/VerticalSplitView.svelte";
-  import { runScript } from "src/lib/script-runner";
   import ConsolePanel from "src/pages/sandbox/ConsolePanel.svelte";
-  import ApiVersionSwitcher from "./ApiVersionSwitcher.svelte";
-  import FileSystem from "./FileSystem.svelte";
+  import ApiVersionSwitcher from "src/pages/sandbox/ApiVersionSwitcher.svelte";
+  import FileSystem from "src/pages/sandbox/FileSystem.svelte";
 
   let running = false;
   let output: string = "";
@@ -21,6 +22,10 @@
     output = outputLines.join("\n");
     running = false;
   }
+
+  function handleScriptLoaded(content: string) {
+    updateEditorContent(editor, content);
+  }
 </script>
 
 <svelte:head>
@@ -31,7 +36,7 @@
   <VerticalSplitView leftPanelName="File Manager">
     <div slot="left" class="absolute left-0 right-0 top-0 bottom-0">
       <ApiVersionSwitcher />
-      <FileSystem />
+      <FileSystem onScriptLoaded={handleScriptLoaded} />
     </div>
     <div
       slot="right"

@@ -32,14 +32,14 @@ export function newEditor(parent: HTMLElement, isDarkTheme: boolean): EditorView
  * Updates the contents of the given editor to the given string.
  * 
  * @param editor The editor to change the contents of
- * @param contents What to change the contents of the editor to
+ * @param content What to change the contents of the editor to
  */
-export function updateContents(editor: EditorView, contents: string) {
+export function updateEditorContent(editor: EditorView, content: string) {
   editor.update([editor.state.update({
     changes: {
       from: 0,
       to: editor.state.doc.length,
-      insert: contents
+      insert: content
     }
   })]);
 }
