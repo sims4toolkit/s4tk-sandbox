@@ -118,6 +118,8 @@
             bind:editor
             bind:hasUnsavedChanges
           />
+          <!-- Don't know why this need to be here, but it fixes Z index -->
+          <FloatingActionButtonGroup {buttonData} />
         </div>
         <ConsolePanel
           slot="bottom"
@@ -128,5 +130,3 @@
     </div>
   </VerticalSplitView>
 </div>
-
-<FloatingActionButtonGroup {buttonData} />

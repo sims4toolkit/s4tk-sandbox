@@ -1,4 +1,5 @@
 <script lang="ts">
+  import Modal from "src/components/layout/Modal.svelte";
   import FileManager from "src/lib/file-manager";
   import Settings from "src/lib/settings";
   import FileList from "src/pages/sandbox/FileList.svelte";
@@ -7,6 +8,7 @@
   export let onScriptLoaded: (filename: string, content: string) => void;
 
   let currentScriptName: string;
+  let showMediaModal = false;
 
   let managersInitialized = false;
   let scriptFileManager: FileManager;
@@ -48,7 +50,7 @@
   }
 
   async function handleMediaFileClick(filename: string) {
-    alert("media " + filename);
+    showMediaModal = true;
   }
 </script>
 
@@ -63,6 +65,7 @@
       onFilesDeleted={handleScriptFilesDeleted}
     />
     <FileList
+      expanded={true}
       title="Media"
       fileManager={mediaFileManager}
       onFileClick={handleMediaFileClick}
@@ -71,3 +74,7 @@
     <p class="ml-2 text-subtle text-sm">Initializing file system...</p>
   {/if}
 </div>
+
+{#if showMediaModal}
+  <Modal title="Media" onClose={() => (showMediaModal = false)}>hi</Modal>
+{/if}
