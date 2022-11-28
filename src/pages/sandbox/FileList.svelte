@@ -45,12 +45,43 @@
   }
 
   async function handleDelete() {
+    if (checkedFilenames.size === 0) return;
+
     const toDelete = [...checkedFilenames];
 
-    const message = `Are you sure you want to delete the following files?\n\n${toDelete}`;
+    const message = `Are you sure you want to delete the following files?\n\n${toDelete.join(
+      ", "
+    )}`;
 
     if (confirm(message)) {
       await fileManager.tryDelete(...toDelete);
+      filenames = fileManager.filenames;
+    }
+
+    isEditing = false;
+  }
+
+  async function handleRename() {
+    if (checkedFilenames.size === 0) return;
+    else if (checkedFilenames.size > 1) {
+      alert(
+        "Only one file can be renamed at a time. Uncheck all but one and try again."
+      );
+      return;
+    }
+
+    const oldName = [...checkedFilenames][0];
+
+    let newName = prompt(`Enter new name for file '${oldName}'`);
+    if (!newName) return;
+    newName = newName.trim();
+
+    if (fileManager.hasFile(newName)) {
+      if (confirm(`Filename '${newName}' is taken. Try again?`)) {
+        handleRename();
+      }
+    } else {
+      await fileManager.tryRename(oldName, newName);
       filenames = fileManager.filenames;
     }
 
@@ -77,6 +108,9 @@
       {#if isEditing}
         <button on:click={handleDelete}>
           <img src="./assets/trash.svg" alt="Delete" class="svg-danger h-4" />
+        </button>
+        <button on:click={handleRename}>
+          <img src="./assets/text-outline.svg" alt="Rename" class="svg h-4" />
         </button>
         <button on:click={() => (isEditing = false)}>
           <img src="./assets/x.svg" alt="Close" class="svg h-4" />
@@ -106,7 +140,7 @@
             {#if checkedFilenames.has(filename)}
               <img
                 src="./assets/checkmark-circle.svg"
-                class="svg-danger h-5"
+                class="svg-accent h-5"
                 alt="Checked"
               />
             {:else}
