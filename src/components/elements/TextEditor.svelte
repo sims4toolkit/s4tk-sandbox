@@ -24,11 +24,12 @@
 </script>
 
 <div class="absolute top-0 bottom-0 left-0 right-0">
-  <div class="absolute top-0 left-0 right-0 h-8 flex items-center pl-2">
-    <h4 class="text-xs text-subtle">File: {filename}</h4>
+  <div class="absolute top-0 left-0 right-0 h-8 flex items-center pl-2 pt-1">
+    <h4 class="text-xs text-subtle">File: {filename ?? "None"}</h4>
   </div>
   <div
     bind:this={editorElement}
     class="absolute top-8 bottom-0 left-0 right-0 overflow-auto"
+    hidden={filename == undefined}
   />
 </div>

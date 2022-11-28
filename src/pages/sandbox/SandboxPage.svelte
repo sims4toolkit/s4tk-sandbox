@@ -70,7 +70,8 @@
   }
 
   function handleScriptLoaded(filename: string, content: string) {
-    saveEditorScript();
+    const fm = FileManager.getInstance("script");
+    if (fm.hasFile(currentScriptName)) saveEditorScript();
     currentScriptName = filename;
     currentScriptContent = content;
     updateEditorContent(editor, content);
