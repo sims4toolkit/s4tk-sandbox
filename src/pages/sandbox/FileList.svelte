@@ -30,7 +30,7 @@
     }
   }
 
-  function handleClick(filename: string) {
+  async function handleClick(filename: string) {
     if (isEditing) {
       if (checkedFilenames.has(filename)) {
         checkedFilenames.delete(filename);
