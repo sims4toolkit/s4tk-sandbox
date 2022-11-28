@@ -10,7 +10,7 @@
   let checkedFilenames = new Set<string>();
   let filenames = fileManager.filenames;
 
-  $: iconName = expanded ? "down" : "right";
+  $: chevronIcon = expanded ? "down" : "right";
 
   $: {
     if (!isEditing) checkedFilenames.clear();
@@ -69,7 +69,7 @@
       on:click={() => (expanded = !expanded)}
     >
       <img
-        src="./assets/chevron-{iconName}.svg"
+        src="./assets/chevron-{chevronIcon}.svg"
         class="svg h-4"
         alt="Chevron"
       />
