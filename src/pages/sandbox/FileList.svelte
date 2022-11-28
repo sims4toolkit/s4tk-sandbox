@@ -87,6 +87,7 @@
     } else {
       await fileManager.tryRename(oldName, newName);
       filenames = fileManager.filenames;
+      onFileClick(newName);
     }
 
     isEditing = false;
