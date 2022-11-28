@@ -3,7 +3,7 @@ import { hyphenToCamel } from "src/lib/helpers";
 import DatabaseService from "src/lib/database";
 import type { SandboxFunctions } from "src/window";
 
-const SCRIPT_HEADER = "const Buffer = window.Node.Buffer;const Sandbox = window.Sandbox;const require = Sandbox.require;";
+const SCRIPT_HEADER = "const Buffer = window.NodeJS.Buffer;const Sandbox = window.Sandbox;const require = Sandbox.require;";
 
 export async function runScript(filename: string): Promise<unknown> {
   return new Promise(async (resolve, reject) => {
