@@ -1,5 +1,6 @@
 <script lang="ts">
   import type { EditorView } from "codemirror";
+  import type { FloatingActionButtonData } from "src/components/elements/types";
   import { updateEditorContent } from "src/lib/editor";
   import { runScript } from "src/lib/script-runner";
   import TextEditor from "src/components/elements/TextEditor.svelte";
@@ -8,11 +9,40 @@
   import ConsolePanel from "src/pages/sandbox/ConsolePanel.svelte";
   import ApiVersionSwitcher from "src/pages/sandbox/ApiVersionSwitcher.svelte";
   import FileSystem from "src/pages/sandbox/FileSystem.svelte";
+  import FloatingActionButtonGroup from "src/components/elements/FloatingActionButtonGroup.svelte";
 
   let running = false;
   let output: string = "";
   let editor: EditorView;
   let currentConsoleTab: any;
+
+  const buttonData: FloatingActionButtonData[] = [
+    {
+      color: "Azure",
+      title: "Download",
+      icon: "download",
+      onClick: () => {
+        alert("Download");
+      },
+    },
+    {
+      color: "Purple",
+      title: "Rename",
+      icon: "text-outline",
+      onClick: () => {
+        alert("Rename");
+      },
+    },
+    {
+      color: "Green",
+      title: "Run",
+      icon: "play",
+      disabled: running,
+      onClick: () => {
+        runEditorScript();
+      },
+    },
+  ];
 
   async function runEditorScript() {
     running = true;
@@ -56,11 +86,13 @@
   </VerticalSplitView>
 </div>
 
-<button
+<!-- <button
   on:click={runEditorScript}
   title="Run"
   class="fixed right-4 bottom-4 h-10 w-10 flex items-center justify-center rounded-full bg-secondary drop-shadow-md z-10"
   disabled={running}
 >
   <img src="./assets/play.svg" class="svg-invert h-6" alt=">" />
-</button>
+</button> -->
+
+<FloatingActionButtonGroup {buttonData} />
