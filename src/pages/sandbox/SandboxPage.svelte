@@ -68,12 +68,12 @@
     running = true;
     output = "Running...";
     window.Sandbox.outputStream.length = 0;
-    window.Sandbox.output(`=== Running script '${currentScriptName}' ===`);
+    window.Sandbox.output(`=== Running script '${currentScriptName}' ===\n`);
 
     runScript(currentScriptName)
       .then(() => {
         window.Sandbox.output(
-          `=== Script '${currentScriptName}' terminated successfully ===`
+          `\n=== Script '${currentScriptName}' terminated successfully ===`
         );
         output = window.Sandbox.outputStream.join("\n");
         running = false;
@@ -81,7 +81,7 @@
       .catch((err) => {
         window.Sandbox.output(err);
         window.Sandbox.output(
-          `=== Script '${currentScriptName}' terminated with error ===`
+          `\n=== Script '${currentScriptName}' terminated with error ===`
         );
         output = window.Sandbox.outputStream.join("\n");
         running = false;
