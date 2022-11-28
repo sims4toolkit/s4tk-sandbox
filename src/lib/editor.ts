@@ -12,9 +12,10 @@ const themeCompartment = new Compartment();
  * Creates a new editor mounted on the element with the given ID.
  * 
  * @param parent The element to mount the editor on
+ * @param onChange Function to call when content changed
  * @param isDarkTheme Whether or not the theme is dark
  */
-export function newEditor(parent: HTMLElement, isDarkTheme: boolean): EditorView {
+export function newEditor(parent: HTMLElement, onChange: () => void, isDarkTheme: boolean): EditorView {
   return new EditorView({
     parent: parent,
     state: EditorState.create({
@@ -22,7 +23,12 @@ export function newEditor(parent: HTMLElement, isDarkTheme: boolean): EditorView
         basicSetup,
         keymap.of([indentWithTab]),
         javascript(),
-        themeCompartment.of(isDarkTheme ? darkEditor : lightEditor)
+        themeCompartment.of(isDarkTheme ? darkEditor : lightEditor),
+        EditorView.updateListener.of(update => {
+          if (update.transactions.some(t => t.docChanged)) {
+            onChange();
+          }
+        })
       ]
     })
   });

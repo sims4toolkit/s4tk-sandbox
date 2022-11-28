@@ -20,6 +20,7 @@
 
   let currentScriptName: string;
   let currentScriptContent: string;
+  let hasUnsavedChanges = false;
 
   const buttonData: FloatingActionButtonData[] = [
     {
@@ -47,6 +48,7 @@
     const fm = FileManager.getInstance("script");
     currentScriptContent = editor.state.doc.toJSON().join("\n");
     fm.setFileContent(currentScriptName, currentScriptContent);
+    hasUnsavedChanges = false;
   }
 
   async function downloadEditorScript() {
@@ -94,7 +96,11 @@
     >
       <HorizontalSplitView bottomPanelName={currentConsoleTab}>
         <div slot="top">
-          <TextEditor bind:filename={currentScriptName} bind:editor />
+          <TextEditor
+            bind:filename={currentScriptName}
+            bind:editor
+            bind:hasUnsavedChanges
+          />
         </div>
         <ConsolePanel
           slot="bottom"
