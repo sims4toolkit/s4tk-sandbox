@@ -1,48 +1,41 @@
 <script lang="ts">
-  import FileList from "./FileList.svelte";
+  import FileManager from "src/lib/file-manager";
+  import FileList from "src/pages/sandbox/FileList.svelte";
+  import { onMount } from "svelte";
 
-  let scriptFilenames: string[] = ["sample"];
-  let mediaFilenames: string[] = [];
+  let managersInitialized = false;
+  let scriptFileManager: FileManager;
+  let mediaFileManager: FileManager;
 
-  function handleMediaFileClick(filename: string) {
-    alert("media" + filename);
-  }
+  onMount(async () => {
+    scriptFileManager = await FileManager.initialize("script");
+    mediaFileManager = await FileManager.initialize("media");
+    managersInitialized = true;
+  });
 
   function handleScriptFileClick(filename: string) {
-    alert("script" + filename);
+    alert("script " + filename);
   }
 
-  function handleMediaAdd() {
-    alert("media add");
-  }
-
-  function handleMediaDelete() {
-    alert("media delete");
-  }
-
-  function handleScriptAdd() {
-    alert("script add");
-  }
-
-  function handleScriptDelete() {
-    alert("script delete");
+  function handleMediaFileClick(filename: string) {
+    alert("media " + filename);
   }
 </script>
 
 <div class="h-full overflow-y-auto">
-  <FileList
-    expanded={true}
-    title="Scripts"
-    filenames={scriptFilenames}
-    onClick={handleScriptFileClick}
-    onAdd={handleScriptAdd}
-    onDelete={handleScriptDelete}
-  />
-  <FileList
-    title="Media"
-    filenames={mediaFilenames}
-    onClick={handleMediaFileClick}
-    onAdd={handleMediaAdd}
-    onDelete={handleMediaDelete}
-  />
+  {#if managersInitialized}
+    <FileList
+      expanded={true}
+      title="Scripts"
+      fileManager={scriptFileManager}
+      onFileClick={handleScriptFileClick}
+    />
+    <FileList
+      title="Media"
+      fileManager={mediaFileManager}
+      onFileClick={handleMediaFileClick}
+    />
+  {:else}
+    <p class="ml-2 text-subtle text-sm">Initializing file system...</p>
+  {/if}
 </div>
