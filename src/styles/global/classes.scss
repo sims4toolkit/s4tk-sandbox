@@ -20,6 +20,10 @@
   filter: var(--filter-svg-accent);
 }
 
+.svg-danger {
+  filter: invert(24%) sepia(89%) saturate(1586%) hue-rotate(341deg) brightness(94%) contrast(96%);
+}
+
 //#endregion SVG
 
 //#region Blurred Background

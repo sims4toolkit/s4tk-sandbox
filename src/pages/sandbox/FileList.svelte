@@ -3,10 +3,17 @@
   export let title: string;
   export let filenames: string[];
   export let onClick: (filename: string) => void;
-  export let onEdit: () => void;
+  export let onDelete: (filenames: string[]) => void;
   export let onAdd: () => void;
 
+  let isEditing = false;
+
   $: iconName = expanded ? "down" : "right";
+
+  function handleDelete() {
+    onDelete(filenames); // FIXME: find ones that are checked
+    isEditing = false;
+  }
 </script>
 
 <div>
@@ -25,12 +32,21 @@
       <h4 class="text-subtle font-bold text-xs uppercase">{title}</h4>
     </button>
     <div class="flex items-center gap-2">
-      <button on:click={onEdit}>
-        <img src="./assets/pencil.svg" alt="Edit" class="svg h-3" />
-      </button>
-      <button on:click={onAdd}>
-        <img src="./assets/plus.svg" alt="New" class="svg h-4" />
-      </button>
+      {#if isEditing}
+        <button on:click={handleDelete}>
+          <img src="./assets/trash.svg" alt="Delete" class="svg-danger h-4" />
+        </button>
+        <button on:click={() => (isEditing = false)}>
+          <img src="./assets/x.svg" alt="Close" class="svg h-4" />
+        </button>
+      {:else}
+        <button on:click={() => (isEditing = true)}>
+          <img src="./assets/pencil.svg" alt="Edit" class="svg h-4" />
+        </button>
+        <button on:click={onAdd}>
+          <img src="./assets/plus.svg" alt="New" class="svg h-5" />
+        </button>
+      {/if}
     </div>
   </div>
   {#if expanded}
