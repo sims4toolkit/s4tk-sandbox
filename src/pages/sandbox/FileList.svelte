@@ -1,17 +1,61 @@
 <script lang="ts">
+  import type FileManager from "src/lib/file-manager";
+
   export let expanded = false;
   export let title: string;
-  export let filenames: string[];
-  export let onClick: (filename: string) => void;
-  export let onDelete: (filenames: string[]) => void;
-  export let onAdd: () => void;
+  export let fileManager: FileManager;
+  export let onFileClick: (filename: string, content: string) => void;
 
   let isEditing = false;
+  let checkedFilenames = new Set<string>();
+  let filenames = fileManager.filenames;
 
   $: iconName = expanded ? "down" : "right";
 
-  function handleDelete() {
-    onDelete(filenames); // FIXME: find ones that are checked
+  $: {
+    if (!isEditing) checkedFilenames.clear();
+  }
+
+  async function handleAdd() {
+    let filename = prompt("Enter unique name for new file");
+    if (!filename) return;
+    filename = filename.trim();
+    if (fileManager.hasFile(filename)) {
+      if (confirm(`Filename '${filename}' is taken. Try again?`)) {
+        handleAdd();
+      }
+    } else {
+      await fileManager.tryAdd(filename, "");
+      filenames = fileManager.filenames;
+    }
+  }
+
+  function handleClick(filename: string) {
+    if (isEditing) {
+      if (checkedFilenames.has(filename)) {
+        checkedFilenames.delete(filename);
+      } else {
+        checkedFilenames.add(filename);
+      }
+
+      checkedFilenames = checkedFilenames;
+    } else {
+      fileManager
+        .getFileContent(filename)
+        .then((content) => onFileClick(filename, content));
+    }
+  }
+
+  async function handleDelete() {
+    const toDelete = [...checkedFilenames];
+
+    const message = `Are you sure you want to delete the following files?\n\n${toDelete}`;
+
+    if (confirm(message)) {
+      await fileManager.tryDelete(...toDelete);
+      filenames = fileManager.filenames;
+    }
+
     isEditing = false;
   }
 </script>
@@ -43,7 +87,7 @@
         <button on:click={() => (isEditing = true)}>
           <img src="./assets/pencil.svg" alt="Edit" class="svg h-4" />
         </button>
-        <button on:click={onAdd}>
+        <button on:click={handleAdd}>
           <img src="./assets/plus.svg" alt="New" class="svg h-5" />
         </button>
       {/if}
@@ -57,9 +101,24 @@
     {:else}
       {#each filenames as filename, key (key)}
         <button
-          class="pl-8 h-8 flex items-center w-full hover:bg-gray-200 hover:dark:bg-gray-800"
-          on:click={() => onClick(filename)}
+          class="pl-8 h-8 flex items-center gap-2 w-full hover:bg-gray-200 hover:dark:bg-gray-800"
+          on:click={() => handleClick(filename)}
         >
+          {#if isEditing}
+            {#if checkedFilenames.has(filename)}
+              <img
+                src="./assets/checkmark-circle.svg"
+                class="svg-danger h-5"
+                alt="Checked"
+              />
+            {:else}
+              <img
+                src="./assets/checkmark-circle-outline.svg"
+                class="svg h-5"
+                alt="Not Checked"
+              />
+            {/if}
+          {/if}
           <h4 class="text-sm">{filename}</h4>
         </button>
       {/each}

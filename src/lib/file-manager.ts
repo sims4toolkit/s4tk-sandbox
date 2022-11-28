@@ -36,6 +36,10 @@ export default class FileManager {
     });
   }
 
+  hasFile(filename: string): boolean {
+    return this._filenames.has(filename);
+  }
+
   async tryAdd(filename: string, content: string): Promise<void> {
     return new Promise(async (resolve, reject) => {
       if (this._filenames.has(filename))
@@ -44,17 +48,25 @@ export default class FileManager {
       DatabaseService.setItem(this._dbStore, filename, content);
       this._filenames.add(filename);
 
+      this._filenamesList = undefined;
+
       resolve();
     });
   }
 
-  async tryDelete(filename: string): Promise<void> {
+  async tryDelete(...filenames: string[]): Promise<void> {
     return new Promise(async (resolve, reject) => {
-      if (!this._filenames.has(filename))
-        return reject(`Filename '${filename}' does not exist.`);
+      for (let i = 0; i < filenames.length; ++i) {
+        const filename = filenames[i];
 
-      DatabaseService.removeItem(this._dbStore, filename);
-      this._filenames.delete(filename);
+        if (!this._filenames.has(filename))
+          return reject(`Filename '${filename}' does not exist.`);
+
+        DatabaseService.removeItem(this._dbStore, filename);
+        this._filenames.delete(filename);
+      }
+
+      this._filenamesList = undefined;
 
       resolve();
     });
@@ -76,6 +88,8 @@ export default class FileManager {
 
       DatabaseService.setItem(this._dbStore, newName, content);
       this._filenames.add(newName);
+
+      this._filenamesList = undefined;
 
       resolve();
     });
