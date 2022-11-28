@@ -11,8 +11,9 @@
   let running = false;
   let output: string = "";
   let editor: EditorView;
-
   let currentConsoleTab: any;
+  let scriptFilenames: string[] = [];
+  let mediaFilenames: string[] = [];
 
   async function runEditorScript() {
     running = true;
@@ -24,11 +25,27 @@
   }
 
   function handleMediaFileClick(filename: string) {
-    alert(filename);
+    alert("media" + filename);
   }
 
   function handleScriptFileClick(filename: string) {
-    alert(filename);
+    alert("script" + filename);
+  }
+
+  function handleMediaAdd() {
+    alert("media add");
+  }
+
+  function handleMediaEdit() {
+    alert("media edit");
+  }
+
+  function handleScriptAdd() {
+    alert("script add");
+  }
+
+  function handleScriptEdit() {
+    alert("script edit");
   }
 </script>
 
@@ -42,15 +59,19 @@
       <ApiVersionSwitcher />
       <div class="h-full overflow-y-auto">
         <FileList
-          title="Scripts"
-          filenames={["first", "second", "third"]}
-          onClick={handleScriptFileClick}
           expanded={true}
+          title="Scripts"
+          filenames={scriptFilenames}
+          onClick={handleScriptFileClick}
+          onAdd={handleScriptAdd}
+          onEdit={handleScriptEdit}
         />
         <FileList
           title="Media"
-          filenames={["first", "second", "third"]}
+          filenames={mediaFilenames}
           onClick={handleMediaFileClick}
+          onAdd={handleMediaAdd}
+          onEdit={handleMediaEdit}
         />
       </div>
     </div>
