@@ -40,6 +40,17 @@ export default class FileManager {
     return this._filenames.has(filename);
   }
 
+  async setFileContent(filename: string, content: string): Promise<void> {
+    return new Promise(async (resolve, reject) => {
+      if (!this._filenames.has(filename))
+        return reject(`Filename '${filename}' does not exist.`);
+
+      DatabaseService.setItem(this._dbStore, filename, content);
+
+      resolve();
+    });
+  }
+
   async tryAdd(filename: string, content: string): Promise<void> {
     return new Promise(async (resolve, reject) => {
       if (this._filenames.has(filename))

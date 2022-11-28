@@ -4,7 +4,7 @@
   export let expanded = false;
   export let title: string;
   export let fileManager: FileManager;
-  export let onFileClick: (filename: string, content: string) => void;
+  export let onFileClick: (filename: string) => void;
 
   let isEditing = false;
   let checkedFilenames = new Set<string>();
@@ -40,9 +40,7 @@
 
       checkedFilenames = checkedFilenames;
     } else {
-      fileManager
-        .getFileContent(filename)
-        .then((content) => onFileClick(filename, content));
+      onFileClick(filename);
     }
   }
 
