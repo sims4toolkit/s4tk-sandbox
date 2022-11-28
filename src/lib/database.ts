@@ -10,7 +10,7 @@ const STORE_API = "api";
 const STORE_API_SPECS = "api_specs";
 const STORE_MEDIA = "media";
 const STORE_SCRIPT = "script";
-type ObjectStore = typeof STORE_API | typeof STORE_API_SPECS | typeof STORE_MEDIA | typeof STORE_SCRIPT;
+export type ObjectStore = typeof STORE_API | typeof STORE_API_SPECS | typeof STORE_MEDIA | typeof STORE_SCRIPT;
 
 //#region Helpers
 
