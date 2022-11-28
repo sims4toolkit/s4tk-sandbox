@@ -1,10 +1,10 @@
 <script lang="ts">
-  import Modal from "src/components/layout/Modal.svelte";
   import FileManager from "src/lib/file-manager";
+  import { setupSamples } from "src/lib/samples-setup";
   import Settings from "src/lib/settings";
   import FileList from "src/pages/sandbox/FileList.svelte";
   import { onMount } from "svelte";
-  import MediaModal from "./MediaModal.svelte";
+  import MediaModal from "src/pages/sandbox/MediaModal.svelte";
 
   export let onScriptLoaded: (filename: string, content: string) => void;
 
@@ -19,9 +19,16 @@
   onMount(async () => {
     scriptFileManager = await FileManager.initialize("script");
     mediaFileManager = await FileManager.initialize("media");
-    managersInitialized = true;
+
+    if (!Settings.hasSeenExampleScript) {
+      await setupSamples();
+      Settings.hasSeenExampleScript = true;
+    }
+
     const firstFilename = scriptFileManager.getFirstFilename();
     if (firstFilename) handleScriptFileClick(firstFilename);
+
+    managersInitialized = true;
   });
 
   async function handleScriptFileClick(filename: string) {

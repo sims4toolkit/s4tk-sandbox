@@ -61,7 +61,7 @@ export default class FileManager {
       if (!this._filenames.has(filename))
         return reject(`Filename '${filename}' does not exist.`);
 
-      DatabaseService.setItem(this._dbStore, filename, content);
+      await DatabaseService.setItem(this._dbStore, filename, content);
 
       resolve();
     });
@@ -72,7 +72,7 @@ export default class FileManager {
       if (this._filenames.has(filename))
         return reject(`Filename '${filename}' already exists.`);
 
-      DatabaseService.setItem(this._dbStore, filename, content);
+      await DatabaseService.setItem(this._dbStore, filename, content);
       this._filenames.add(filename);
 
       this._filenamesList = undefined;
@@ -89,7 +89,7 @@ export default class FileManager {
         if (!this._filenames.has(filename))
           return reject(`Filename '${filename}' does not exist.`);
 
-        DatabaseService.removeItem(this._dbStore, filename);
+        await DatabaseService.removeItem(this._dbStore, filename);
         this._filenames.delete(filename);
       }
 
@@ -110,10 +110,10 @@ export default class FileManager {
 
       const content = await DatabaseService.getItem(this._dbStore, oldName);
 
-      DatabaseService.removeItem(this._dbStore, oldName);
+      await DatabaseService.removeItem(this._dbStore, oldName);
       this._filenames.delete(oldName);
 
-      DatabaseService.setItem(this._dbStore, newName, content);
+      await DatabaseService.setItem(this._dbStore, newName, content);
       this._filenames.add(newName);
 
       this._filenamesList = undefined;
