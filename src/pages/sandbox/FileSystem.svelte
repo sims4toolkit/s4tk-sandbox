@@ -4,9 +4,11 @@
   import Settings from "src/lib/settings";
   import FileList from "src/pages/sandbox/FileList.svelte";
   import { onMount } from "svelte";
+  import MediaModal from "./MediaModal.svelte";
 
   export let onScriptLoaded: (filename: string, content: string) => void;
 
+  let currentMediaName: string;
   let currentScriptName: string;
   let showMediaModal = false;
 
@@ -50,6 +52,7 @@
   }
 
   async function handleMediaFileClick(filename: string) {
+    currentMediaName = filename;
     showMediaModal = true;
   }
 </script>
@@ -76,5 +79,8 @@
 </div>
 
 {#if showMediaModal}
-  <Modal title="Media" onClose={() => (showMediaModal = false)}>hi</Modal>
+  <MediaModal
+    filename={currentMediaName}
+    onClose={() => (showMediaModal = false)}
+  />
 {/if}
