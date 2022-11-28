@@ -60,10 +60,10 @@
 
 <div>
   <div
-    class="px-2 h-8 flex items-center justify-between w-full bg-gray-300 dark:bg-gray-950"
+    class="px-2 h-8 flex items-center gap-4 justify-between w-full bg-gray-300 dark:bg-gray-950 min-w-fit"
   >
     <button
-      class="flex items-center gap-2 w-full"
+      class="flex items-center gap-2 w-full min-w-fit"
       on:click={() => (expanded = !expanded)}
     >
       <img
@@ -73,7 +73,7 @@
       />
       <h4 class="text-subtle font-bold text-xs uppercase">{title}</h4>
     </button>
-    <div class="flex items-center gap-2">
+    <div class="flex items-center gap-2 min-w-fit">
       {#if isEditing}
         <button on:click={handleDelete}>
           <img src="./assets/trash.svg" alt="Delete" class="svg-danger h-4" />
