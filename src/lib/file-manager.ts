@@ -1,6 +1,8 @@
 import type { ObjectStore } from "src/lib/database";
 import DatabaseService from "src/lib/database";
 
+const FILE_MANAGER_MAP = new Map<ObjectStore, FileManager>();
+
 export default class FileManager {
   private _filenamesList?: string[];
   public get filenames(): string[] {
@@ -18,10 +20,20 @@ export default class FileManager {
 
   public static async initialize(dbStore: ObjectStore): Promise<FileManager> {
     return new Promise(async (resolve) => {
+      if (FILE_MANAGER_MAP.has(dbStore))
+        return resolve(FILE_MANAGER_MAP.get(dbStore));
+
       const filenames = await DatabaseService.getAllKeys(dbStore);
       const fm = new FileManager(dbStore, new Set(filenames));
+      FILE_MANAGER_MAP.set(dbStore, fm);
       resolve(fm);
     });
+  }
+
+  public static getInstance(dbStore: ObjectStore): FileManager {
+    const fm = FILE_MANAGER_MAP.get(dbStore);
+    if (!fm) throw new Error(`Tried to get '${dbStore}' file manager before it was initialized.`);
+    return fm;
   }
 
   async getFileContent(filename: string): Promise<string> {
