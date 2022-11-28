@@ -34,17 +34,20 @@
     <h4 class="text-sm font-bold mb-1">Output</h4>
     <p class="text-subtle text-sm">
       The <code>Sandbox.output(...args: string[])</code> function can be used to
-      write output to the sandbox console.
+      write output to the sandbox console. Note that using the browser's
+      <code>console</code> will NOT output to the sandbox console.
     </p>
   </div>
   <div>
     <h4 class="text-sm font-bold mb-1">Running scripts from each other</h4>
     <p class="text-subtle text-sm">
-      The <code>Sandbox.runScript(filename: string): any</code> function can be used
-      to run your scripts from each other. Note that each script is executed in its
-      own function scope, and is therefore allowed to return any value it wants.
-      To mock export/import behavior, you can simply return a value from one script
-      and use that value in the other.
+      The <code
+        >async Sandbox.runScript(filename: string): Promise&lt;unknown&gt;</code
+      >
+      function can be used to run your scripts from each other. Note that each script
+      is executed in its own async function scope, so you can pass values between
+      scripts by using <code>return</code> in one and <code>await</code>
+      in the other.
     </p>
   </div>
   <div>
@@ -52,10 +55,12 @@
     <p class="text-subtle text-sm">
       The 'fs' module is not available in the sandbox. To read files into a
       script, upload them to the media folder and use the <code
-        >Sandbox.import(filename: string): Buffer</code
+        >async Sandbox.import(filename: string): Promise&lt;Buffer&gt;</code
       >
       function. To save files to your computer, use the
-      <code>Sandbox.download(filename: string, data: string | Buffer)</code>
+      <code
+        >async Sandbox.download(filename: string, data: string | Buffer)</code
+      >
       function.
     </p>
   </div>
