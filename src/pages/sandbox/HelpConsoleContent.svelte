@@ -4,9 +4,9 @@
     <p class="text-subtle text-sm">
       The sandbox runs client-side, so you do not have access to any Node or npm
       modules. The only modules you can import are those listed in the API
-      Version Details (located at the top of the file manager panel), plus a
-      browserified <code>Buffer</code> class (no import necessary - use it as if
-      you're in a Node environment).
+      Version Details / Docs (located at the top of the file manager panel),
+      plus a browserified <code>Buffer</code> class (no import necessary - use it
+      as if you're in a Node environment).
     </p>
   </div>
   <div>

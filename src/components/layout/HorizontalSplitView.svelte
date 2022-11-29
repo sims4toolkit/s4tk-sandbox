@@ -116,6 +116,6 @@
     class:flex={isCollapsed}
     on:click={handleCollapsedClick}
   >
-    <p class="text-sm text-subtle">{bottomPanelName}</p>
+    <p class="text-xs uppercase text-subtle">{bottomPanelName}</p>
   </button>
 </div>

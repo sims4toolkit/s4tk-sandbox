@@ -15,7 +15,7 @@
       disabled={currentTab === "Output"}
     >
       <h4
-        class="text-sm underline-offset-4 select-none"
+        class="text-xs underline-offset-8 uppercase select-none"
         class:underline={currentTab === "Output"}
         class:text-subtle={currentTab !== "Output"}
       >
@@ -27,7 +27,7 @@
       disabled={currentTab === "Help"}
     >
       <h4
-        class="text-sm underline-offset-4 select-none"
+        class="text-xs underline-offset-8 uppercase select-none"
         class:underline={currentTab === "Help"}
         class:text-subtle={currentTab !== "Help"}
       >
@@ -39,7 +39,7 @@
       disabled={currentTab === "Settings"}
     >
       <h4
-        class="text-sm underline-offset-4 select-none"
+        class="text-xs underline-offset-8 uppercase select-none"
         class:underline={currentTab === "Settings"}
         class:text-subtle={currentTab !== "Settings"}
       >

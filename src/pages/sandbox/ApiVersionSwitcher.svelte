@@ -44,7 +44,7 @@
     </select>
     <button
       class="text-accent-secondary-light dark:text-accent-secondary-dark underline underline-offset-2 text-sm"
-      on:click={() => (showVersionDetails = true)}>Details</button
+      on:click={() => (showVersionDetails = true)}>Docs</button
     >
   </div>
   {#if apiLoaded}
