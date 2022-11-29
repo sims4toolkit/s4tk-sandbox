@@ -1,6 +1,6 @@
 <script lang="ts">
-  import HelpConsoleContent from "src/pages/sandbox/HelpConsoleContent.svelte";
-  import SettingsConsoleContent from "src/pages/sandbox/SettingsConsoleContent.svelte";
+  import HelpConsoleContent from "src/components/editor/HelpConsoleContent.svelte";
+  import SettingsConsoleContent from "src/components/editor/SettingsConsoleContent.svelte";
 
   export let output: string;
   export let currentTab: "Output" | "Help" | "Settings" = "Output";
