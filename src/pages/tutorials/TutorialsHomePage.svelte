@@ -32,6 +32,8 @@
         {#each tutorialDatas as data, key (key)}
           <TutorialLink {data} />
         {/each}
+      {:else}
+        <p class="text-subtle">Loading...</p>
       {/if}
     </div>
   </div>
