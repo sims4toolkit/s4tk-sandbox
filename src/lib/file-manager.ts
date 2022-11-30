@@ -7,8 +7,10 @@ export default class FileManager {
   private _filenamesList?: string[];
   public get filenames(): string[] {
     return this._filenamesList ??= [...this._filenames].sort((a, b) => {
-      if (a < b) return -1;
-      if (a > b) return 1;
+      const lowerA = a.toLowerCase();
+      const lowerB = b.toLowerCase();
+      if (lowerA < lowerB) return -1;
+      if (lowerA > lowerB) return 1;
       return 0;
     });
   }
