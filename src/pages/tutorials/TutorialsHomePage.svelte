@@ -1,17 +1,17 @@
 <script lang="ts">
   import SectionHeader from "src/components/elements/SectionHeader.svelte";
   import Footer from "src/components/Footer.svelte";
-  import { fetchTutorialsIndex, TutorialData } from "src/lib/tutorials";
+  import { fetchTutorialsIndex, TutorialMetaData } from "src/lib/tutorials";
   import TutorialLink from "./TutorialLink.svelte";
 
-  let tutorialDatas: (TutorialData & { key: string })[];
+  let tutorialDatas: TutorialMetaData[];
   let tutorialsLoaded = false;
 
   fetchTutorialsIndex().then((index) => {
     tutorialDatas = [];
+
     for (const key in index.tutorials) {
-      const data = index.tutorials[key];
-      tutorialDatas.push({ ...data, key });
+      tutorialDatas.push(index.tutorials[key]);
     }
 
     // TODO: sort

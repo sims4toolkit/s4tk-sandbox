@@ -11,6 +11,7 @@
     fetchTutorial,
     fetchTutorialsIndex,
     Tutorial,
+    TutorialMetaData,
   } from "src/lib/tutorials";
 
   export let params: { name: string };
@@ -21,8 +22,12 @@
   let editor: EditorView;
 
   let fetchedTutorial: Tutorial;
-  let tutorialName = params.name;
-  let tutorialDescription = "";
+  let tutorialMetaData: TutorialMetaData;
+  let currentPageIndex = 0;
+
+  $: tutorialName = tutorialMetaData?.name ?? "Loading...";
+  $: tutorialDescription = tutorialMetaData?.description ?? "Loading...";
+  $: currentPage = fetchedTutorial?.pages[currentPageIndex];
 
   onMount(() => {
     buttonData = [
@@ -37,7 +42,7 @@
         title: "Reset",
         icon: "refresh",
         onClick() {
-          updateEditorContent(editor, fetchedTutorial.script);
+          updateEditorContent(editor, currentPage?.script);
         },
       },
       {
@@ -50,12 +55,7 @@
 
     fetchTutorialsIndex()
       .then((index) => {
-        const tutorialData = index.tutorials[params.name];
-        if (tutorialData) {
-          tutorialName = tutorialData.name;
-          tutorialDescription = tutorialData.description;
-          // TODO: also make sure required API version is used
-        }
+        tutorialMetaData = index.tutorials[params.name];
       })
       .catch((err) => {
         console.error(err);
@@ -64,7 +64,8 @@
     fetchTutorial(params.name)
       .then((tutorial) => {
         fetchedTutorial = tutorial;
-        updateEditorContent(editor, tutorial.script);
+        currentPageIndex = 0;
+        updateEditorContent(editor, tutorial.pages[0].script);
       })
       .catch((err) => {
         console.error(err);
@@ -97,9 +98,11 @@
             </p>
           </div>
           <hr class="my-4" />
-          <div class="whitespace-pre-wrap">
-            {@html fetchedTutorial.guide}
-          </div>
+          {#if Boolean(currentPage)}
+            <div class="whitespace-pre-wrap">
+              {@html currentPage.guide}
+            </div>
+          {/if}
         {:else}
           <p class="text-subtle">Loading...</p>
         {/if}

@@ -1,23 +1,27 @@
-const REPO_URL_BASE = "https://raw.githubusercontent.com/sims4toolkit/sandbox-tutorials/main";
+const URL_BASE = "https://raw.githubusercontent.com/sims4toolkit/sandbox-tutorials/main/generated";
 const TUTORIALS_FOLDER = "tutorials";
 const INDEX_FILENAME = "index.json";
 
 export interface TutorialsIndex {
   version: number;
-  tutorials: {
-    [key: string]: TutorialData;
-  };
+  tutorials: { [key: string]: TutorialMetaData; };
+}
+
+export interface TutorialMetaData {
+  key: string;
+  name: string;
+  description: string;
+  apiVersion: string;
+  tags: string[];
 }
 
 export interface Tutorial {
-  guide: string;
-  script: string;
-}
-
-export interface TutorialData {
-  name: string;
-  description: string;
-  requiredApiVersion: string;
+  key: string;
+  media: { [key: string]: string; };
+  pages: {
+    script: string;
+    guide: string;
+  }[];
 }
 
 let tutorialsIndex: TutorialsIndex;
@@ -27,7 +31,7 @@ export async function fetchTutorialsIndex(): Promise<TutorialsIndex> {
   return new Promise((resolve, reject) => {
     if (tutorialsIndex) return resolve(tutorialsIndex);
 
-    fetch(`${REPO_URL_BASE}/${INDEX_FILENAME}`)
+    fetch(`${URL_BASE}/${INDEX_FILENAME}`)
       .then(res => {
         if (res.ok)
           return res.json();
@@ -49,15 +53,9 @@ export async function fetchTutorial(key: string): Promise<Tutorial> {
     if (tutorialsMap.has(key)) return resolve(tutorialsMap.get(key));
 
     try {
-      const scriptRes = await fetch(`${REPO_URL_BASE}/${TUTORIALS_FOLDER}/${key}.js`);
-      if (!scriptRes.ok) return reject(scriptRes.statusText);
-      const script = await scriptRes.text();
-
-      const guideRes = await fetch(`${REPO_URL_BASE}/${TUTORIALS_FOLDER}/${key}.html`);
-      if (!guideRes.ok) return reject(guideRes.statusText);
-      const guide = await guideRes.text();
-
-      const tutorial: Tutorial = { script, guide };
+      const res = await fetch(`${URL_BASE}/${TUTORIALS_FOLDER}/${key}.json`);
+      if (!res.ok) return reject(res.statusText);
+      const tutorial: Tutorial = await res.json();
       tutorialsMap.set(key, tutorial);
       resolve(tutorial);
     } catch (err) {

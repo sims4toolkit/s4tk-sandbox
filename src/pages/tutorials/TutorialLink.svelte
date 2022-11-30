@@ -1,8 +1,8 @@
 <script lang="ts">
   import { link } from "svelte-spa-router";
-  import type { TutorialData } from "src/lib/tutorials";
+  import type { TutorialMetaData } from "src/lib/tutorials";
 
-  export let data: TutorialData & { key: string };
+  export let data: TutorialMetaData;
 </script>
 
 <a href="/tutorials/{data.key}" use:link class="no-underline">
@@ -10,7 +10,7 @@
     <h4 class="text-primary text-lg font-bold">{data.name}</h4>
     <p>{data.description}</p>
     <p class="monospace text-subtle text-xs mt-2">
-      API: {data.requiredApiVersion}
+      API: {data.apiVersion}
     </p>
   </div>
 </a>
