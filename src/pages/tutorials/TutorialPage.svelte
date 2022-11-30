@@ -79,25 +79,33 @@
 
 <div class="fixed top-10 left-0 right-0 bottom-0 dark:bg-gray-900">
   <VerticalSplitView leftPanelName="Tutorial Manager">
-    <div slot="left" class="absolute left-0 right-0 top-0 bottom-0">
+    <div
+      slot="left"
+      class="absolute left-0 right-0 top-0 bottom-0 overflow-y-auto"
+    >
       <ApiVersionSwitcher fixedVersion="0.1.0" />
-      {#if Boolean(fetchedTutorial)}
-        <div class="p-2">
+      <div class="p-2">
+        <hr class="mb-4" />
+        {#if Boolean(fetchedTutorial)}
           <div class="overflow-hidden whitespace-normal break-words">
-            <h4 class="text-primary font-bold mb-1">
+            <p class="text-subtle font-bold text-xs mb-1">TUTORIAL</p>
+            <h4 class="text-primary text-lg mb-2">
               {tutorialName}
             </h4>
-            <p class="text-subtle text-sm mb-4">
+            <p class="text-sm">
               {tutorialDescription}
             </p>
           </div>
-
+          <hr class="my-4" />
           <div class="whitespace-pre-wrap">
             <!-- FIXME: this is markdown -->
-            {fetchedTutorial.guide}
+            {@html fetchedTutorial.guide}
+            {@html fetchedTutorial.guide}
           </div>
-        </div>
-      {/if}
+        {:else}
+          <p class="text-subtle">Loading...</p>
+        {/if}
+      </div>
     </div>
     <SandboxEditor
       slot="right"
@@ -111,3 +119,9 @@
     />
   </VerticalSplitView>
 </div>
+
+<style lang="scss">
+  hr {
+    border-color: var(--color-shadow);
+  }
+</style>
