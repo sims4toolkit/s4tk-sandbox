@@ -34,7 +34,9 @@
     <h4 class="text-sm font-bold mb-1">Output</h4>
     <p class="text-subtle text-sm">
       The <code>Sandbox.output(...args: string[])</code> function can be used to
-      write output to the sandbox console. Note that using the browser's
+      write generic output to the sandbox console, and
+      <code>Sandbox.test(name: string, condition: boolean)</code>
+      can be used to run simple pass/fail tests. Note that using the browser's
       <code>console</code> will NOT output to the sandbox console.
     </p>
   </div>

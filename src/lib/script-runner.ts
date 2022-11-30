@@ -83,6 +83,13 @@ const Sandbox: SandboxFunctions = {
 
     outputFilenamePrefix = undefined;
     return result;
+  },
+  test(name: string, condition: boolean) {
+    if (condition) {
+      Sandbox.output(`Test '${name}' passed`);
+    } else {
+      Sandbox.output(`TEST FAILED: Test '${name}' did not pass`);
+    }
   }
 };
 

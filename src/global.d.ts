@@ -14,6 +14,7 @@ export interface SandboxFunctions {
   output(...args: string[]): void;
   require(path: string): unknown;
   runScript(filename: string): Promise<unknown>;
+  test(name: string, condition: boolean): void;
 }
 
 declare global {
