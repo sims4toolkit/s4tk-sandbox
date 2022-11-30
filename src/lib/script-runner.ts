@@ -4,8 +4,14 @@ import type { SandboxDownloadItem, SandboxFunctions } from "src/global";
 
 const SCRIPT_HEADER = "const Buffer = window.NodeJS.Buffer;const Sandbox = window.Sandbox;const require = Sandbox.require;";
 
-export async function runScript(filename: string, script: string): Promise<unknown> {
+type SandboxContext = "filesystem" | "tutorial";
+
+let currentSandboxContext: SandboxContext = "filesystem";
+
+export async function runScript(filename: string, script: string, context?: SandboxContext): Promise<unknown> {
   return new Promise(async (resolve, reject) => {
+    if (context) currentSandboxContext = context;
+
     try {
       if (!script)
         throw new Error(`Script '${filename}' either does not exist or is empty.`);
@@ -29,7 +35,14 @@ const Sandbox: SandboxFunctions = {
     downloadQueue.push({ filename, content });
   },
   async import(filename: string): Promise<Buffer> {
-    const b64 = await DatabaseService.getItem("media", filename);
+    if (currentSandboxContext === "filesystem") {
+      var b64 = await DatabaseService.getItem("media", filename);
+    } else {
+      var b64 = Sandbox.mediaOverride[filename];
+    }
+
+    if (!b64) Sandbox.output(`Media file '${filename}' does not exist in this context.`);
+
     return window.NodeJS.Buffer.from(b64, "base64");
   },
   output(...args: string[]) {
@@ -70,19 +83,26 @@ const Sandbox: SandboxFunctions = {
     }
   },
   async runScript(filename: string): Promise<unknown> {
-    outputFilenamePrefix = filename;
+    return new Promise(async (resolve, reject) => {
+      if (currentSandboxContext === "tutorial") {
+        Sandbox.output("Sandbox.runScript() is unavailable in tutorials.");
+        return reject("Sandbox.runScript() is unavailable in tutorials.");
+      }
 
-    let result: any;
+      outputFilenamePrefix = filename;
 
-    try {
-      const script = await DatabaseService.getItem("script", filename);
-      result = await runScript(filename, script);
-    } catch (err) {
-      Sandbox.output(err);
-    }
+      let result: any;
 
-    outputFilenamePrefix = undefined;
-    return result;
+      try {
+        const script = await DatabaseService.getItem("script", filename);
+        result = await runScript(filename, script);
+      } catch (err) {
+        Sandbox.output(err);
+      }
+
+      outputFilenamePrefix = undefined;
+      resolve(result);
+    });
   },
   test(name: string, condition: boolean) {
     if (condition) {

@@ -8,6 +8,7 @@ export interface SandboxDownloadItem {
 export interface SandboxFunctions {
   readonly outputStream: string[];
   readonly downloadQueue: SandboxDownloadItem[];
+  mediaOverride?: { [key: string]: string; };
 
   download(filename: string, content: string | Buffer): Promise<void>;
   import(filename: string): Promise<Buffer>;

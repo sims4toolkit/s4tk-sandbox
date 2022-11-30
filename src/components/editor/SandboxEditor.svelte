@@ -43,7 +43,9 @@
 
     window.Sandbox.output(`=== Running script '${currentScriptName}' ===\n`);
 
-    runScript(currentScriptName, currentScriptContent)
+    const context = isTutorial ? "tutorial" : "filesystem";
+
+    runScript(currentScriptName, currentScriptContent, context)
       .then(() => {
         window.Sandbox.output(
           `\n=== Script '${currentScriptName}' terminated successfully ===`

@@ -66,6 +66,7 @@
     fetchTutorial(params.name)
       .then((tutorial) => {
         fetchedTutorial = tutorial;
+        window.Sandbox.mediaOverride = fetchedTutorial.media;
         currentPageIndex = 0;
         updateEditorContent(editor, tutorial.pages[0].script);
       })
