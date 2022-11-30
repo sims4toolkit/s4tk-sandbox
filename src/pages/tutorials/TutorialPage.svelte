@@ -109,7 +109,25 @@
           <p class="text-subtle">Loading...</p>
         {/if}
       </div>
-      <!-- TODO: pagination -->
+      {#if Boolean(fetchedTutorial)}
+        <div class="flex-1 p-2 flex flex-col gap-2 items-center">
+          <div class="flex-1 flex justify-between gap-2 w-full">
+            <button
+              class="flex-1 bg-gray-300 dark:bg-gray-950 border border-solid border-transparent hover:border-gray-400 dark:hover:border-gray-600 rounded flex gap-2 py-1 justify-center items-center"
+            >
+              <img src="./assets/chevron-left.svg" class="svg h-4" alt="<" />
+              <p class="text-sm">Back</p>
+            </button>
+            <button
+              class="flex-1 bg-gray-300 dark:bg-gray-950 border border-solid border-transparent hover:border-gray-400 dark:hover:border-gray-600 rounded flex gap-2 py-1 justify-center items-center"
+            >
+              <p class="text-sm">Next</p>
+              <img src="./assets/chevron-right.svg" class="svg h-4" alt=">" />
+            </button>
+          </div>
+          <p class="text-xs text-subtle max-w-fit">Page 1 of 1</p>
+        </div>
+      {/if}
     </div>
     <SandboxEditor
       slot="right"
