@@ -1,15 +1,23 @@
 <script lang="ts">
   import { link } from "svelte-spa-router";
   import type { TutorialMetaData } from "src/lib/tutorials";
+  import TutorialTag from "./TutorialTag.svelte";
 
   export let data: TutorialMetaData;
 </script>
 
 <a href="/tutorials/{data.key}" use:link class="no-underline">
-  <div class="p-4 bg-gray-200 dark:bg-gray-700 rounded-md drop-shadow">
+  <div
+    class="flex flex-col gap-2 h-full p-4 bg-gray-200 dark:bg-gray-700 rounded-md drop-shadow"
+  >
     <h4 class="text-primary text-lg font-bold">{data.name}</h4>
-    <p>{data.description}</p>
-    <p class="monospace text-subtle text-xs mt-2">
+    <p class="flex-1">{data.description}</p>
+    <div class="flex gap-1 whitespace-normal">
+      {#each data.tags as tag, key (key)}
+        <TutorialTag {tag} />
+      {/each}
+    </div>
+    <p class="monospace text-subtle text-xs">
       API: {data.apiVersion}
     </p>
   </div>
