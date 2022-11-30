@@ -76,11 +76,25 @@
   });
 
   function handleBackButtonPressed() {
-    if (canClickBack) --currentPageIndex;
+    if (canClickBack) {
+      --currentPageIndex;
+      // don't use currentPage because of timing
+      updateEditorContent(
+        editor,
+        fetchedTutorial.pages[currentPageIndex].script
+      );
+    }
   }
 
   function handleNextButtonPressed() {
-    if (canClickNext) ++currentPageIndex;
+    if (canClickNext) {
+      ++currentPageIndex;
+      // don't use currentPage because of timing
+      updateEditorContent(
+        editor,
+        fetchedTutorial.pages[currentPageIndex].script
+      );
+    }
   }
 </script>
 
