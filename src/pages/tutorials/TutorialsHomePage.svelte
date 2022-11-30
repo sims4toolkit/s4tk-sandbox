@@ -2,6 +2,11 @@
   import { link } from "svelte-spa-router";
   import SectionHeader from "src/components/elements/SectionHeader.svelte";
   import Footer from "src/components/Footer.svelte";
+  import { fetchTutorialsIndex } from "src/lib/tutorials";
+
+  fetchTutorialsIndex().then((index) => {
+    console.log(index);
+  });
 </script>
 
 <svelte:head>

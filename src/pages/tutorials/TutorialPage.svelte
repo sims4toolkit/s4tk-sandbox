@@ -6,6 +6,7 @@
   import { updateEditorContent } from "src/lib/editor";
   import VerticalSplitView from "src/components/layout/VerticalSplitView.svelte";
   import ApiVersionSwitcher from "src/components/editor/ApiVersionSwitcher.svelte";
+  import { fetchTutorial, Tutorial } from "src/lib/tutorials";
 
   export let params: { name: string };
 
@@ -14,7 +15,7 @@
   let currentScriptContent: string;
   let currentScriptName = params.name; // FIXME: what if none?
   let editor: EditorView;
-  let fetchedScript: string;
+  let fetchedTutorial: Tutorial;
 
   onMount(() => {
     buttonData = [
@@ -29,8 +30,8 @@
         title: "Reset",
         icon: "refresh",
         onClick() {
-          if (fetchedScript) {
-            updateEditorContent(editor, fetchedScript);
+          if (fetchedTutorial) {
+            updateEditorContent(editor, fetchedTutorial.script);
           } else {
             // TODO: error handling
             console.error("Script was never fetched");
@@ -45,19 +46,16 @@
       },
     ];
 
-    fetchScript()
-      .then((script) => {
-        fetchedScript = script;
-        updateEditorContent(editor, script);
+    fetchTutorial(params.name)
+      .then((tutorial) => {
+        fetchedTutorial = tutorial;
+        updateEditorContent(editor, tutorial.script);
       })
       .catch((err) => {
-        console.error(err); // TODO:
+        // TODO: error handling
+        console.error(err);
       });
   });
-
-  async function fetchScript(): Promise<string> {
-    return params.name;
-  }
 </script>
 
 <svelte:head>
