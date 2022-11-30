@@ -5,6 +5,7 @@
   const COLLAPSED_HEIGHT = 30;
 
   export let bottomPanelName: string;
+  export let defaultBottomHeight: number = 200;
 
   // elements
   let panelWrapper: HTMLDivElement;
@@ -20,10 +21,9 @@
   onMount(() => {
     window.addEventListener("resize", reactToResize);
 
-    const bottomHeight = 200;
     const wrapperRect = panelWrapper.getBoundingClientRect();
-    topPanel.style.height = `${wrapperRect.height - bottomHeight}px`;
-    bottomPanel.style.height = `${bottomHeight}px`;
+    topPanel.style.height = `${wrapperRect.height - defaultBottomHeight}px`;
+    bottomPanel.style.height = `${defaultBottomHeight}px`;
     collapsedBottomPanel.style.height = `${COLLAPSED_HEIGHT}px`;
   });
 
@@ -77,8 +77,8 @@
   function handleCollapsedClick() {
     isCollapsed = false;
     const wrapperRect = panelWrapper.getBoundingClientRect();
-    topPanel.style.height = `${wrapperRect.height - MIN_HEIGHT + 10}px`;
-    bottomPanel.style.height = `${MIN_HEIGHT + 10}px`;
+    topPanel.style.height = `${wrapperRect.height - defaultBottomHeight}px`;
+    bottomPanel.style.height = `${defaultBottomHeight}px`;
   }
 </script>
 

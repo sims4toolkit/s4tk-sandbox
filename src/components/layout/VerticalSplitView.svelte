@@ -5,6 +5,7 @@
   const COLLAPSED_WIDTH = 30;
 
   export let leftPanelName: string;
+  export let defaultLeftWidth: number = 300;
 
   // elements
   let panelWrapper: HTMLDivElement;
@@ -20,10 +21,9 @@
   onMount(() => {
     window.addEventListener("resize", reactToResize);
 
-    const leftWidth = 300;
     const wrapperRect = panelWrapper.getBoundingClientRect();
-    leftPanel.style.width = `${leftWidth}px`;
-    rightPanel.style.width = `${wrapperRect.width - leftWidth}px`;
+    leftPanel.style.width = `${defaultLeftWidth}px`;
+    rightPanel.style.width = `${wrapperRect.width - defaultLeftWidth}px`;
     collapsedLeftPanel.style.width = `${COLLAPSED_WIDTH}px`;
   });
 
@@ -77,8 +77,8 @@
   function handleCollapsedClick() {
     isCollapsed = false;
     const wrapperRect = panelWrapper.getBoundingClientRect();
-    leftPanel.style.width = `${MIN_WIDTH + 10}px`;
-    rightPanel.style.width = `${wrapperRect.width - MIN_WIDTH - 10}px`;
+    leftPanel.style.width = `${defaultLeftWidth}px`;
+    rightPanel.style.width = `${wrapperRect.width - defaultLeftWidth}px`;
   }
 </script>
 

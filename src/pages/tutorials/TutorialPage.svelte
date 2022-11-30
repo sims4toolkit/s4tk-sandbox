@@ -79,7 +79,7 @@
 </svelte:head>
 
 <div class="fixed top-10 left-0 right-0 bottom-0 dark:bg-gray-900">
-  <VerticalSplitView leftPanelName="Tutorial Manager">
+  <VerticalSplitView leftPanelName="Tutorial Manager" defaultLeftWidth={400}>
     <div
       slot="left"
       class="absolute left-0 right-0 top-0 bottom-0 overflow-y-auto"
@@ -107,6 +107,7 @@
           <p class="text-subtle">Loading...</p>
         {/if}
       </div>
+      <!-- TODO: pagination -->
     </div>
     <SandboxEditor
       slot="right"
