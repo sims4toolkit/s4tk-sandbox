@@ -25,6 +25,8 @@
   let tutorialMetaData: TutorialMetaData;
   let currentPageIndex = 0;
 
+  $: canClickBack = currentPageIndex !== 0;
+  $: canClickNext = currentPageIndex + 1 < (fetchedTutorial?.pages.length ?? 0);
   $: tutorialName = tutorialMetaData?.name ?? "Loading...";
   $: tutorialDescription = tutorialMetaData?.description ?? "Loading...";
   $: currentPage = fetchedTutorial?.pages[currentPageIndex];
@@ -72,6 +74,14 @@
         replace(`#/tutorial-not-found/${params.name}`);
       });
   });
+
+  function handleBackButtonPressed() {
+    if (canClickBack) --currentPageIndex;
+  }
+
+  function handleNextButtonPressed() {
+    if (canClickNext) ++currentPageIndex;
+  }
 </script>
 
 <svelte:head>
@@ -86,7 +96,7 @@
     >
       <ApiVersionSwitcher fixedVersion="0.1.0" />
       <hr class="mt-2 mb-4 mx-2" />
-      <div class="px-2 pb-2 flex-grow overflow-y-auto">
+      <div class="flex-1 px-2 pb-2 flex-grow overflow-y-auto">
         {#if Boolean(fetchedTutorial)}
           <div class="overflow-hidden whitespace-normal break-words">
             <p class="text-subtle font-bold text-xs mb-1">TUTORIAL</p>
@@ -110,22 +120,32 @@
         {/if}
       </div>
       {#if Boolean(fetchedTutorial)}
-        <div class="flex-1 p-2 flex flex-col gap-2 items-center">
+        <div class="p-2 flex flex-col gap-2 items-center">
           <div class="flex-1 flex justify-between gap-2 w-full">
             <button
               class="flex-1 bg-gray-300 dark:bg-gray-950 border border-solid border-transparent hover:border-gray-400 dark:hover:border-gray-600 rounded flex gap-2 py-1 justify-center items-center"
+              class:pointer-events-none={!canClickBack}
+              class:opacity-40={!canClickBack}
+              disabled={!canClickBack}
+              on:click={handleBackButtonPressed}
             >
               <img src="./assets/chevron-left.svg" class="svg h-4" alt="<" />
               <p class="text-sm">Back</p>
             </button>
             <button
               class="flex-1 bg-gray-300 dark:bg-gray-950 border border-solid border-transparent hover:border-gray-400 dark:hover:border-gray-600 rounded flex gap-2 py-1 justify-center items-center"
+              class:pointer-events-none={!canClickNext}
+              class:opacity-40={!canClickNext}
+              disabled={!canClickNext}
+              on:click={handleNextButtonPressed}
             >
               <p class="text-sm">Next</p>
               <img src="./assets/chevron-right.svg" class="svg h-4" alt=">" />
             </button>
           </div>
-          <p class="text-xs text-subtle max-w-fit">Page 1 of 1</p>
+          <p class="text-xs text-subtle max-w-fit">
+            Page {currentPageIndex + 1} of {fetchedTutorial.pages.length}
+          </p>
         </div>
       {/if}
     </div>
