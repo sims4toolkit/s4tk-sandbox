@@ -5,17 +5,19 @@ const INDEX_FILENAME = "index.json";
 export interface TutorialsIndex {
   version: number;
   tutorials: {
-    [key: string]: {
-      name: string;
-      description: string;
-      requiredApiVersion: string;
-    };
+    [key: string]: TutorialData;
   };
 }
 
 export interface Tutorial {
   guide: string;
   script: string;
+}
+
+export interface TutorialData {
+  name: string;
+  description: string;
+  requiredApiVersion: string;
 }
 
 let tutorialsIndex: TutorialsIndex;
