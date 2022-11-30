@@ -17,9 +17,6 @@
         <TutorialTag {tag} />
       {/each}
     </div>
-    <p class="monospace text-subtle text-xs">
-      API: {data.apiVersion}
-    </p>
   </div>
 </a>
 
