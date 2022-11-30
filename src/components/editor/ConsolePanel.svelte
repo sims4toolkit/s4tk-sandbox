@@ -4,6 +4,7 @@
 
   export let output: string;
   export let currentTab: "Output" | "Help" | "Settings" = "Output";
+  export let showOutputOnly = false;
 
   const outputPlaceholder = `Errors and calls to <code class="text-primary">Sandbox.output(...args: string[])</code> will be written here.`;
 </script>
@@ -22,30 +23,32 @@
         Output
       </h4>
     </button>
-    <button
-      on:click={() => (currentTab = "Help")}
-      disabled={currentTab === "Help"}
-    >
-      <h4
-        class="text-xs underline-offset-8 uppercase select-none"
-        class:underline={currentTab === "Help"}
-        class:text-subtle={currentTab !== "Help"}
+    {#if !showOutputOnly}
+      <button
+        on:click={() => (currentTab = "Help")}
+        disabled={currentTab === "Help"}
       >
-        Help
-      </h4>
-    </button>
-    <button
-      on:click={() => (currentTab = "Settings")}
-      disabled={currentTab === "Settings"}
-    >
-      <h4
-        class="text-xs underline-offset-8 uppercase select-none"
-        class:underline={currentTab === "Settings"}
-        class:text-subtle={currentTab !== "Settings"}
+        <h4
+          class="text-xs underline-offset-8 uppercase select-none"
+          class:underline={currentTab === "Help"}
+          class:text-subtle={currentTab !== "Help"}
+        >
+          Help
+        </h4>
+      </button>
+      <button
+        on:click={() => (currentTab = "Settings")}
+        disabled={currentTab === "Settings"}
       >
-        Settings
-      </h4>
-    </button>
+        <h4
+          class="text-xs underline-offset-8 uppercase select-none"
+          class:underline={currentTab === "Settings"}
+          class:text-subtle={currentTab !== "Settings"}
+        >
+          Settings
+        </h4>
+      </button>
+    {/if}
   </div>
 
   <div class="p-2 h-full overflow-y-auto">

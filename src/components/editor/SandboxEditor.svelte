@@ -130,6 +130,7 @@
       slot="bottom"
       bind:output
       bind:currentTab={currentConsoleTab}
+      showOutputOnly={!useFileSystem}
     />
   </HorizontalSplitView>
 </div>

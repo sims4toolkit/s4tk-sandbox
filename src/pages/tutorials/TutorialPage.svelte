@@ -4,6 +4,8 @@
   import SandboxEditor from "src/components/editor/SandboxEditor.svelte";
   import type { FloatingActionButtonData } from "src/components/elements/types";
   import { updateEditorContent } from "src/lib/editor";
+  import VerticalSplitView from "src/components/layout/VerticalSplitView.svelte";
+  import ApiVersionSwitcher from "src/components/editor/ApiVersionSwitcher.svelte";
 
   export let params: { name: string };
 
@@ -48,12 +50,19 @@
 </svelte:head>
 
 <div class="fixed top-10 left-0 right-0 bottom-0 dark:bg-gray-900">
-  <SandboxEditor
-    bind:this={sandboxEditor}
-    bind:buttonData
-    bind:currentScriptContent
-    bind:currentScriptName
-    bind:editor
-    useFileSystem={false}
-  />
+  <VerticalSplitView leftPanelName="File Manager">
+    <div slot="left" class="absolute left-0 right-0 top-0 bottom-0">
+      <ApiVersionSwitcher fixedVersion="0.1.0" />
+      <p>Test</p>
+    </div>
+    <SandboxEditor
+      slot="right"
+      bind:this={sandboxEditor}
+      bind:buttonData
+      bind:currentScriptContent
+      bind:currentScriptName
+      bind:editor
+      useFileSystem={false}
+    />
+  </VerticalSplitView>
 </div>

@@ -4,7 +4,7 @@
   import type { FloatingActionButtonData } from "src/components/elements/types";
   import { updateEditorContent } from "src/lib/editor";
   import VerticalSplitView from "src/components/layout/VerticalSplitView.svelte";
-  import ApiVersionSwitcher from "src/pages/sandbox/ApiVersionSwitcher.svelte";
+  import ApiVersionSwitcher from "src/components/editor/ApiVersionSwitcher.svelte";
   import FileSystem from "src/pages/sandbox/FileSystem.svelte";
   import SandboxEditor from "src/components/editor/SandboxEditor.svelte";
   import { onMount } from "svelte";

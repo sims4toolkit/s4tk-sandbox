@@ -2,6 +2,8 @@
   import Modal from "src/components/layout/Modal.svelte";
   import { loadApi, S4TK_API_STATE, S4TK_API_VERSIONS } from "src/lib/s4tk-api";
 
+  export let fixedVersion: string = null;
+
   let apiLoaded = false;
   let showVersionDetails = false;
   let selectedVersionIndex = 0; // FIXME: find index of last API version
@@ -9,7 +11,7 @@
   async function refreshS4TK() {
     apiLoaded = false;
 
-    const version = S4TK_API_VERSIONS[selectedVersionIndex];
+    const version = fixedVersion ?? S4TK_API_VERSIONS[selectedVersionIndex];
 
     loadApi(version)
       .then((result) => {
@@ -37,6 +39,7 @@
       name="s4tk-version-select"
       bind:value={selectedVersionIndex}
       class="block w-full h-6 min-w-fit pl-2 pr-8 rounded text-sm bg-transparent border border-gray-600 dark:border-gray-700"
+      disabled={Boolean(fixedVersion)}
     >
       {#each S4TK_API_VERSIONS as version, key (key)}
         <option value={key}>{version}</option>
@@ -48,9 +51,14 @@
     >
   </div>
   {#if apiLoaded}
-    <p class="text-subtle text-xs">API loaded successfully</p>
+    <p class="text-subtle text-xs">
+      API loaded successfully
+      {#if Boolean(fixedVersion)}
+        <span class="text-red-500 dark:text-red-400">(version locked)</span>
+      {/if}
+    </p>
   {:else}
-    <p class="text-xs text-red-700 dark:text-red-500">API has not loaded</p>
+    <p class="text-xs text-red-500 dark:text-red-400">API has not loaded</p>
   {/if}
 </div>
 
