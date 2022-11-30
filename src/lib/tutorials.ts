@@ -11,6 +11,7 @@ export interface TutorialMetaData {
   key: string;
   name: string;
   description: string;
+  docs?: string;
   apiVersion: string;
   tags: string[];
 }

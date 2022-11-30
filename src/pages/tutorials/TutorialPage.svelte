@@ -120,6 +120,17 @@
             <p class="text-sm">
               {tutorialDescription}
             </p>
+            {#if Boolean(tutorialMetaData?.docs)}
+              <p class="mt-2">
+                <a
+                  class="text-secondary text-sm"
+                  href={tutorialMetaData.docs}
+                  target="_blank"
+                >
+                  Relevant Documentation
+                </a>
+              </p>
+            {/if}
           </div>
           <hr class="my-4" />
           {#if Boolean(currentPage)}
