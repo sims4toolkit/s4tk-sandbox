@@ -77,6 +77,7 @@
       bind:currentScriptName
       bind:editor
       useFileSystem={false}
+      isTutorial={true}
     />
   </VerticalSplitView>
 </div>

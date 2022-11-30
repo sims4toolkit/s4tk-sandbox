@@ -4,6 +4,7 @@
   import { newEditor, updateTheme } from "src/lib/editor";
   import Settings, { SettingsSubscriptionManager } from "src/lib/settings";
 
+  export let filePrefix = "File";
   export let filename: string;
   export let editor: EditorView = null;
   export let hasUnsavedChanges = false;
@@ -42,7 +43,7 @@
 
 <div class="absolute top-0 bottom-0 left-0 right-0">
   <div class="absolute top-0 left-0 right-0 h-8 flex items-center pl-2 pt-1">
-    <h4 class="text-xs text-subtle">File: {filename ?? "None"}</h4>
+    <h4 class="text-xs text-subtle">{filePrefix}: {filename ?? "None"}</h4>
     {#if useFileSystem}
       <p
         class="text-xs text-red-500 dark:text-red-400"

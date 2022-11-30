@@ -15,6 +15,7 @@
   export let currentScriptName: string;
   export let editor: EditorView;
   export let useFileSystem: boolean;
+  export let isTutorial = false;
 
   let currentConsoleTab: any;
   let hasUnsavedChanges = false;
@@ -123,6 +124,7 @@
         bind:editor
         bind:hasUnsavedChanges
         bind:useFileSystem
+        filePrefix={isTutorial ? "Tutorial" : "File"}
       />
       <FloatingActionButtonGroup {buttonData} />
     </div>
