@@ -1,0 +1,18 @@
+.tutorial-guide-wrapper {
+  h2 {
+    font-weight: bold;
+    font-size: 1.2rem;
+  }
+
+  h4 {
+    color: var(--color-text-subtle);
+    text-transform: uppercase;
+    font-weight: bold;
+    font-size: 0.9rem;
+    margin-top: 1rem;
+  }
+
+  code {
+    color: var(--color-accent-secondary);
+  }
+}

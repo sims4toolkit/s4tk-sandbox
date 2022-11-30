@@ -82,15 +82,15 @@
   <VerticalSplitView leftPanelName="Tutorial Manager" defaultLeftWidth={400}>
     <div
       slot="left"
-      class="absolute left-0 right-0 top-0 bottom-0 overflow-y-auto"
+      class="absolute left-0 right-0 top-0 bottom-0 flex flex-col"
     >
       <ApiVersionSwitcher fixedVersion="0.1.0" />
-      <div class="p-2">
-        <hr class="mb-4" />
+      <hr class="mt-2 mb-4 mx-2" />
+      <div class="px-2 pb-2 flex-grow overflow-y-auto">
         {#if Boolean(fetchedTutorial)}
           <div class="overflow-hidden whitespace-normal break-words">
             <p class="text-subtle font-bold text-xs mb-1">TUTORIAL</p>
-            <h4 class="text-primary text-lg mb-2">
+            <h4 class="text-primary text-lg mb-2 font-bold">
               {tutorialName}
             </h4>
             <p class="text-sm">
@@ -99,7 +99,9 @@
           </div>
           <hr class="my-4" />
           {#if Boolean(currentPage)}
-            <div class="whitespace-pre-wrap">
+            <div
+              class="tutorial-guide-wrapper whitespace-normal flex flex-col gap-2"
+            >
               {@html currentPage.guide}
             </div>
           {/if}
