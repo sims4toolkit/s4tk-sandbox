@@ -61,11 +61,11 @@
 </script>
 
 <svelte:head>
-  <title>Tutorial</title>
+  <title>Tutorial | {params.name}</title>
 </svelte:head>
 
 <div class="fixed top-10 left-0 right-0 bottom-0 dark:bg-gray-900">
-  <VerticalSplitView leftPanelName="File Manager">
+  <VerticalSplitView leftPanelName="Tutorial Manager">
     <div slot="left" class="absolute left-0 right-0 top-0 bottom-0">
       <ApiVersionSwitcher fixedVersion="0.1.0" />
       <p>Test</p>
