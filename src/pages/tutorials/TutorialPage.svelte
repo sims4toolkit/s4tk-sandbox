@@ -98,8 +98,6 @@
           </div>
           <hr class="my-4" />
           <div class="whitespace-pre-wrap">
-            <!-- FIXME: this is markdown -->
-            {@html fetchedTutorial.guide}
             {@html fetchedTutorial.guide}
           </div>
         {:else}
