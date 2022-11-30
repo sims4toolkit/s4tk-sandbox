@@ -14,6 +14,7 @@
   let currentScriptContent: string;
   let currentScriptName = params.name; // FIXME: what if none?
   let editor: EditorView;
+  let fetchedScript: string;
 
   onMount(() => {
     buttonData = [
@@ -22,6 +23,19 @@
         title: "Download",
         icon: "download",
         onClick: sandboxEditor.downloadEditorScript,
+      },
+      {
+        color: "Orange",
+        title: "Reset",
+        icon: "refresh",
+        onClick() {
+          if (fetchedScript) {
+            updateEditorContent(editor, fetchedScript);
+          } else {
+            // TODO: error handling
+            console.error("Script was never fetched");
+          }
+        },
       },
       {
         color: "Green",
@@ -33,6 +47,7 @@
 
     fetchScript()
       .then((script) => {
+        fetchedScript = script;
         updateEditorContent(editor, script);
       })
       .catch((err) => {
