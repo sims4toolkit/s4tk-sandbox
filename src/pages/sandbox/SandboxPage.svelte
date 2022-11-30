@@ -68,6 +68,7 @@
       bind:currentScriptContent
       bind:currentScriptName
       bind:editor
+      useFileSystem={true}
     />
   </VerticalSplitView>
 </div>

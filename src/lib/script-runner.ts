@@ -4,13 +4,12 @@ import type { SandboxDownloadItem, SandboxFunctions } from "src/global";
 
 const SCRIPT_HEADER = "const Buffer = window.NodeJS.Buffer;const Sandbox = window.Sandbox;const require = Sandbox.require;";
 
-export async function runScript(filename: string): Promise<unknown> {
+export async function runScript(filename: string, script: string): Promise<unknown> {
   return new Promise(async (resolve, reject) => {
     try {
-      const userScript = await DatabaseService.getItem("script", filename);
-      if (!userScript)
+      if (!script)
         throw new Error(`Script '${filename}' either does not exist or is empty.`);
-      const asyncFn = Function(`return new Promise(async (resolve, reject) => { (async () => { ${SCRIPT_HEADER}${userScript} })().then(r => resolve(r)).catch(err => reject(err)); });`);
+      const asyncFn = Function(`return new Promise(async (resolve, reject) => { (async () => { ${SCRIPT_HEADER}${script} })().then(r => resolve(r)).catch(err => reject(err)); });`);
       const result = await asyncFn();
       resolve(result);
     } catch (err) {
@@ -76,7 +75,8 @@ const Sandbox: SandboxFunctions = {
     let result: any;
 
     try {
-      result = await runScript(filename);
+      const script = await DatabaseService.getItem("script", filename);
+      result = await runScript(filename, script);
     } catch (err) {
       Sandbox.output(err);
     }

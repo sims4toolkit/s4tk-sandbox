@@ -14,6 +14,7 @@
   export let currentScriptContent: string;
   export let currentScriptName: string;
   export let editor: EditorView;
+  export let useFileSystem: boolean;
 
   let currentConsoleTab: any;
   let hasUnsavedChanges = false;
@@ -41,7 +42,7 @@
 
     window.Sandbox.output(`=== Running script '${currentScriptName}' ===\n`);
 
-    runScript(currentScriptName)
+    runScript(currentScriptName, currentScriptContent)
       .then(() => {
         window.Sandbox.output(
           `\n=== Script '${currentScriptName}' terminated successfully ===`
@@ -60,10 +61,13 @@
   };
 
   export const saveEditorScript = async () => {
-    const fm = FileManager.getInstance("script");
     currentScriptContent = editor.state.doc.toJSON().join("\n");
-    fm.setFileContent(currentScriptName, currentScriptContent);
-    hasUnsavedChanges = false;
+
+    if (useFileSystem) {
+      const fm = FileManager.getInstance("script");
+      fm.setFileContent(currentScriptName, currentScriptContent);
+      hasUnsavedChanges = false;
+    }
   };
 
   //#endregion Exported Functions
@@ -118,6 +122,7 @@
         bind:filename={currentScriptName}
         bind:editor
         bind:hasUnsavedChanges
+        bind:useFileSystem
       />
       <FloatingActionButtonGroup {buttonData} />
     </div>

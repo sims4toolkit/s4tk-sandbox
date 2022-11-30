@@ -7,7 +7,11 @@
   export let filename: string;
   export let editor: EditorView = null;
   export let hasUnsavedChanges = false;
+  export let useFileSystem: boolean;
+
   let editorElement: HTMLDivElement;
+
+  $: editorHidden = filename == undefined;
 
   $: {
     if (filename) hasUnsavedChanges = false;
@@ -32,23 +36,25 @@
   });
 
   function handleContentChanged() {
-    hasUnsavedChanges = true;
+    if (useFileSystem) hasUnsavedChanges = true;
   }
 </script>
 
 <div class="absolute top-0 bottom-0 left-0 right-0">
   <div class="absolute top-0 left-0 right-0 h-8 flex items-center pl-2 pt-1">
     <h4 class="text-xs text-subtle">File: {filename ?? "None"}</h4>
-    <p
-      class="text-xs text-red-500 dark:text-red-400"
-      hidden={!hasUnsavedChanges}
-    >
-      &nbsp;(Unsaved Changes)
-    </p>
+    {#if useFileSystem}
+      <p
+        class="text-xs text-red-500 dark:text-red-400"
+        hidden={!hasUnsavedChanges}
+      >
+        &nbsp;(Unsaved Changes)
+      </p>
+    {/if}
   </div>
   <div
     bind:this={editorElement}
     class="absolute top-8 bottom-0 left-0 right-0 overflow-auto"
-    hidden={filename == undefined}
+    hidden={editorHidden}
   />
 </div>

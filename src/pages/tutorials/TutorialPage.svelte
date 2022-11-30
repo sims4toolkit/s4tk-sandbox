@@ -1,15 +1,40 @@
 <script lang="ts">
+  import type { EditorView } from "codemirror";
   import { onMount } from "svelte";
+  import SandboxEditor from "src/components/editor/SandboxEditor.svelte";
+  import type { FloatingActionButtonData } from "src/components/elements/types";
+  import { updateEditorContent } from "src/lib/editor";
 
   export let params: { name: string };
 
+  let sandboxEditor: SandboxEditor;
+  let buttonData: FloatingActionButtonData[] = [];
+  let currentScriptContent: string;
+  let currentScriptName = params.name; // FIXME: what if none?
+  let editor: EditorView;
+
   onMount(() => {
+    buttonData = [
+      {
+        color: "Purple",
+        title: "Download",
+        icon: "download",
+        onClick: sandboxEditor.downloadEditorScript,
+      },
+      {
+        color: "Green",
+        title: "Run",
+        icon: "play",
+        onClick: sandboxEditor.runEditorScript,
+      },
+    ];
+
     fetchScript()
       .then((script) => {
-        // TODO:
+        updateEditorContent(editor, script);
       })
       .catch((err) => {
-        // TODO:
+        console.error(err); // TODO:
       });
   });
 
@@ -19,7 +44,16 @@
 </script>
 
 <svelte:head>
-  <title>Loading...</title>
+  <title>Tutorial</title>
 </svelte:head>
 
-<p class="mt-20">Loading tutorial...</p>
+<div class="fixed top-10 left-0 right-0 bottom-0 dark:bg-gray-900">
+  <SandboxEditor
+    bind:this={sandboxEditor}
+    bind:buttonData
+    bind:currentScriptContent
+    bind:currentScriptName
+    bind:editor
+    useFileSystem={false}
+  />
+</div>
