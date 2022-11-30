@@ -26,7 +26,12 @@ export async function fetchTutorialsIndex(): Promise<TutorialsIndex> {
     if (tutorialsIndex) return resolve(tutorialsIndex);
 
     fetch(`${REPO_URL_BASE}/${INDEX_FILENAME}`)
-      .then(res => res.json())
+      .then(res => {
+        if (res.ok)
+          return res.json();
+        else
+          reject(res.statusText);
+      })
       .then(json => {
         tutorialsIndex = json;
         resolve(json);
@@ -43,9 +48,11 @@ export async function fetchTutorial(key: string): Promise<Tutorial> {
 
     try {
       const scriptRes = await fetch(`${REPO_URL_BASE}/${TUTORIALS_FOLDER}/${key}.js`);
+      if (!scriptRes.ok) return reject(scriptRes.statusText);
       const script = await scriptRes.text();
 
       const guideRes = await fetch(`${REPO_URL_BASE}/${TUTORIALS_FOLDER}/${key}.md`);
+      if (!guideRes.ok) return reject(guideRes.statusText);
       const guide = await guideRes.text();
 
       const tutorial: Tutorial = { script, guide };

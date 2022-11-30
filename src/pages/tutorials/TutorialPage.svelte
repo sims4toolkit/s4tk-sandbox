@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { replace } from "svelte-spa-router";
   import type { EditorView } from "codemirror";
   import { onMount } from "svelte";
   import SandboxEditor from "src/components/editor/SandboxEditor.svelte";
@@ -52,8 +53,8 @@
         updateEditorContent(editor, tutorial.script);
       })
       .catch((err) => {
-        // TODO: error handling
         console.error(err);
+        replace(`#/tutorial-not-found/${params.name}`);
       });
   });
 </script>
