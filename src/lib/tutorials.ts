@@ -53,7 +53,7 @@ export async function fetchTutorial(key: string): Promise<Tutorial> {
       if (!scriptRes.ok) return reject(scriptRes.statusText);
       const script = await scriptRes.text();
 
-      const guideRes = await fetch(`${REPO_URL_BASE}/${TUTORIALS_FOLDER}/${key}.md`);
+      const guideRes = await fetch(`${REPO_URL_BASE}/${TUTORIALS_FOLDER}/${key}.html`);
       if (!guideRes.ok) return reject(guideRes.statusText);
       const guide = await guideRes.text();
 
