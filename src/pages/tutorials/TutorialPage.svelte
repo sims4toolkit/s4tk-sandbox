@@ -46,6 +46,7 @@
         icon: "refresh",
         onClick() {
           updateEditorContent(editor, currentPage?.script);
+          sandboxEditor.clearOutput();
         },
       },
       {
