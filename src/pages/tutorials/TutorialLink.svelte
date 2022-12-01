@@ -12,7 +12,7 @@
   >
     <h4 class="text-primary text-lg font-bold">{data.name}</h4>
     <p class="flex-1">{data.description}</p>
-    <div class="flex gap-1 whitespace-normal">
+    <div class="flex gap-1 whitespace-normal mt-1">
       {#each data.tags as tag, key (key)}
         <TutorialTag {tag} />
       {/each}
