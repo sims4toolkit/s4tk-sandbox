@@ -15,4 +15,11 @@
   code {
     color: var(--color-accent-secondary);
   }
+
+  img.inline-svg {
+    filter: var(--filter-svg);
+    height: 1.1rem;
+    margin: 0 2px;
+    display: inline-block;
+  }
 }

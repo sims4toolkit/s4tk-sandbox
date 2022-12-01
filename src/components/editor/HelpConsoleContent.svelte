@@ -12,13 +12,13 @@
   <div>
     <h4 class="text-sm font-bold mb-1">Importing S4TK modules</h4>
     <p class="text-subtle text-sm">
-      The available S4TK modules exist on <code>window.S4TK</code>, but require
-      syntax is supported for convenience. For example, to import the Package
-      class, you can use either
-      <code>const {"{ Package }"} = window.S4TK.models</code>
-      or
-      <code>const {"{ Package }"} = require("@s4tk/models")</code>. The require
-      syntax is at full parity with the S4TK Node library.
+      The available S4TK modules exist on <code>window.S4TK</code>, but
+      'require' syntax is supported for convenience. For example, to use the
+      Package class, you can either access it directly with
+      <code>window.S4TK.models.Package</code>
+      or import it with
+      <code>const {"{ Package }"} = require("@s4tk/models")</code>. The
+      'require' syntax is at full parity with the S4TK Node library.
     </p>
   </div>
   <div>
