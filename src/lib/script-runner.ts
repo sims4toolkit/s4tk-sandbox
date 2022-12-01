@@ -85,7 +85,6 @@ const Sandbox: SandboxFunctions = {
   async runScript(filename: string): Promise<unknown> {
     return new Promise(async (resolve, reject) => {
       if (currentSandboxContext === "tutorial") {
-        Sandbox.output("Sandbox.runScript() is unavailable in tutorials.");
         return reject("Sandbox.runScript() is unavailable in tutorials.");
       }
 
