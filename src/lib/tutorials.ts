@@ -1,9 +1,11 @@
-const URL_BASE = "https://raw.githubusercontent.com/sims4toolkit/sandbox-tutorials/main/generated";
+// const URL_BASE = "https://raw.githubusercontent.com/sims4toolkit/sandbox-tutorials/main/generated";
+const URL_BASE = "http://127.0.0.1:5500/generated";
 const TUTORIALS_FOLDER = "tutorials";
 const INDEX_FILENAME = "index.json";
 
 export interface TutorialsIndex {
   version: number;
+  tags: string[];
   tutorials: { [key: string]: TutorialMetaData; };
 }
 
@@ -13,6 +15,7 @@ export interface TutorialMetaData {
   description: string;
   docs?: string;
   apiVersion: string;
+  recommended?: boolean;
   tags: string[];
 }
 
