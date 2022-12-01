@@ -1,8 +1,13 @@
 <script lang="ts">
   export let tag: string;
+  export let active = true;
 </script>
 
-{#if tag === "Sandbox"}
+{#if !active}
+  <p class="text-xs px-1 bg-slate-300 text-slate-900 rounded max-w-min">
+    {tag}
+  </p>
+{:else if tag === "Sandbox"}
   <p class="text-xs px-1 bg-sky-300 text-sky-900 rounded max-w-min">
     {tag}
   </p>

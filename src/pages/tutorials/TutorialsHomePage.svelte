@@ -1,41 +1,109 @@
 <script lang="ts">
+  import SearchBar from "src/components/elements/SearchBar.svelte";
   import SectionHeader from "src/components/elements/SectionHeader.svelte";
   import Footer from "src/components/Footer.svelte";
   import { fetchTutorialsIndex, TutorialMetaData } from "src/lib/tutorials";
   import TutorialLink from "./TutorialLink.svelte";
+  import TutorialTag from "./TutorialTag.svelte";
 
   let tutorialDatas: TutorialMetaData[];
   let tutorialsLoaded = false;
+  let tutorialsToShow: TutorialMetaData[];
+
+  let allTags: string[];
+  let selectedTags: Set<string>;
+
+  let searchQuery = "";
+
+  $: {
+    searchQuery;
+    if (tutorialsLoaded) refreshTutorialsToShow();
+  }
 
   fetchTutorialsIndex().then((index) => {
     tutorialDatas = [];
+    tutorialsToShow = tutorialDatas;
+    allTags = index.tags;
+    selectedTags = new Set(allTags);
 
     for (const key in index.tutorials) {
       tutorialDatas.push(index.tutorials[key]);
     }
 
-    // TODO: sort
+    // TODO: sort?
 
     tutorialsLoaded = true;
   });
+
+  function toggleTag(tag: string) {
+    if (selectedTags.has(tag)) {
+      selectedTags.delete(tag);
+    } else {
+      selectedTags.add(tag);
+    }
+
+    selectedTags = selectedTags;
+    refreshTutorialsToShow();
+  }
+
+  function refreshTutorialsToShow() {
+    tutorialsToShow = tutorialDatas.filter((data) => {
+      if (!data.tags.some((tag) => selectedTags.has(tag))) return false;
+      if (!searchQuery) return true;
+      const lowerSearch = searchQuery.toLowerCase();
+      return (
+        data.name.toLowerCase().includes(lowerSearch) ||
+        data.description.toLowerCase().includes(lowerSearch)
+      );
+    });
+  }
 </script>
 
 <svelte:head>
   <title>S4TK Tutorials</title>
 </svelte:head>
 
-<section class="pt-20 pb-10 flex-1 w-full flex justify-center">
+<section class="pt-20 pb-10 flex-1 w-full min-h-screen flex justify-center">
   <div class="w-full xl:max-w-screen-xl px-4">
     <SectionHeader title="Tutorials" />
-    <div class="w-full tutorials-wrapper mt-10">
-      {#if tutorialsLoaded}
-        {#each tutorialDatas as data, key (key)}
-          <TutorialLink {data} />
-        {/each}
-      {:else}
-        <p class="text-subtle">Loading...</p>
-      {/if}
-    </div>
+    <p class="mt-4">
+      These tutorials assume no knowledge of S4TK, but require some familiarity
+      with JavaScript. If you're entirely new to JavaScript, please read <a
+        href="https://medium.com/p/5307132f02c0"
+        target="_blank"
+        class="text-secondary">this article</a
+      >.
+    </p>
+    {#if tutorialsLoaded}
+      <div
+        class="my-10 w-full flex gap-4 flex-col sm:flex-row justify-between items-center"
+      >
+        <div>
+          <p class="text-xs text-subtle uppercase mb-2 font-bold">
+            click to toggle
+          </p>
+          <div class="flex gap-1">
+            {#each allTags as tag, key (key)}
+              <button on:click={() => toggleTag(tag)}>
+                <TutorialTag {tag} active={selectedTags.has(tag)} />
+              </button>
+            {/each}
+          </div>
+        </div>
+        <SearchBar bind:searchQuery />
+      </div>
+      <div class="w-full tutorials-wrapper">
+        {#if tutorialsToShow.length > 0}
+          {#each tutorialsToShow as data, key (key)}
+            <TutorialLink {data} />
+          {/each}
+        {:else}
+          <p class="text-subtle">No tutorials match your search terms.</p>
+        {/if}
+      </div>
+    {:else}
+      <p class="text-subtle">Loading...</p>
+    {/if}
   </div>
 </section>
 <Footer />
