@@ -11,7 +11,7 @@
   let tutorialsToShow: TutorialMetaData[];
 
   let allTags: string[];
-  let selectedTags: Set<string>;
+  let requiredTags = new Set<string>();
 
   let searchQuery = "";
 
@@ -24,7 +24,6 @@
     tutorialDatas = [];
     tutorialsToShow = tutorialDatas;
     allTags = index.tags;
-    selectedTags = new Set(allTags);
 
     for (const key in index.tutorials) {
       tutorialDatas.push(index.tutorials[key]);
@@ -36,19 +35,24 @@
   });
 
   function toggleTag(tag: string) {
-    if (selectedTags.has(tag)) {
-      selectedTags.delete(tag);
+    if (requiredTags.has(tag)) {
+      requiredTags.delete(tag);
     } else {
-      selectedTags.add(tag);
+      requiredTags.add(tag);
     }
 
-    selectedTags = selectedTags;
+    requiredTags = requiredTags;
     refreshTutorialsToShow();
   }
 
   function refreshTutorialsToShow() {
     tutorialsToShow = tutorialDatas.filter((data) => {
-      if (!data.tags.some((tag) => selectedTags.has(tag))) return false;
+      if (requiredTags.size > 0) {
+        if (![...requiredTags].every((tag) => data.tags.includes(tag))) {
+          return false;
+        }
+      }
+
       if (!searchQuery) return true;
       const lowerSearch = searchQuery.toLowerCase();
       return (
@@ -79,13 +83,11 @@
         class="my-10 w-full flex gap-4 flex-col sm:flex-row justify-between items-center"
       >
         <div>
-          <p class="text-xs text-subtle uppercase mb-2 font-bold">
-            click to toggle
-          </p>
+          <p class="text-xs text-subtle mb-2 font-bold">Required Tags</p>
           <div class="flex gap-1">
             {#each allTags as tag, key (key)}
               <button on:click={() => toggleTag(tag)}>
-                <TutorialTag {tag} active={selectedTags.has(tag)} />
+                <TutorialTag {tag} active={requiredTags.has(tag)} />
               </button>
             {/each}
           </div>
