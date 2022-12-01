@@ -8,7 +8,7 @@
 
 <a href="/tutorials/{data.key}" use:link class="no-underline">
   <div
-    class="flex flex-col gap-2 h-full p-4 bg-gray-200 dark:bg-gray-700 rounded-md drop-shadow"
+    class="relative flex flex-col gap-2 h-full p-4 bg-gray-200 dark:bg-gray-700 rounded-md drop-shadow"
   >
     <h4 class="text-primary text-lg font-bold">{data.name}</h4>
     <p class="flex-1">{data.description}</p>
@@ -17,6 +17,14 @@
         <TutorialTag {tag} />
       {/each}
     </div>
+    {#if data.recommended}
+      <img
+        src="./assets/sparkles.svg"
+        alt="Star"
+        title="Recommended"
+        class="h-5 absolute top-4 right-4"
+      />
+    {/if}
   </div>
 </a>
 
@@ -31,6 +39,10 @@
     &:hover {
       top: -2px;
       cursor: pointer;
+    }
+
+    img {
+      filter: var(--filter-svg-gold);
     }
   }
 </style>

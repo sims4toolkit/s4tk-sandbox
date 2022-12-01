@@ -29,7 +29,11 @@
       tutorialDatas.push(index.tutorials[key]);
     }
 
-    // TODO: sort?
+    tutorialDatas.sort((a, b) => {
+      if (a.recommended && !b.recommended) return -1;
+      else if (b.recommended && !a.recommended) return 1;
+      return 0;
+    });
 
     tutorialsLoaded = true;
   });
