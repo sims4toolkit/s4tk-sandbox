@@ -24,6 +24,10 @@
 
   //#region Exported Functions
 
+  export const clearOutput = () => {
+    output = "";
+  };
+
   export const downloadEditorScript = async () => {
     saveEditorScript();
     const filename = getDownloadFilename("js");

@@ -20,6 +20,7 @@
   let buttonData: FloatingActionButtonData[] = [];
   let currentScriptContent: string;
   let editor: EditorView;
+  let scrollableGuide: HTMLDivElement;
 
   let fetchedTutorial: Tutorial;
   let tutorialMetaData: TutorialMetaData;
@@ -79,23 +80,22 @@
   function handleBackButtonPressed() {
     if (canClickBack) {
       --currentPageIndex;
-      // don't use currentPage because of timing
-      updateEditorContent(
-        editor,
-        fetchedTutorial.pages[currentPageIndex].script
-      );
+      resetEditor();
     }
   }
 
   function handleNextButtonPressed() {
     if (canClickNext) {
       ++currentPageIndex;
-      // don't use currentPage because of timing
-      updateEditorContent(
-        editor,
-        fetchedTutorial.pages[currentPageIndex].script
-      );
+      resetEditor();
     }
+  }
+
+  function resetEditor() {
+    // don't use currentPage because of timing
+    updateEditorContent(editor, fetchedTutorial.pages[currentPageIndex].script);
+    sandboxEditor.clearOutput();
+    scrollableGuide.scrollTop = 0;
   }
 </script>
 
@@ -111,7 +111,10 @@
     >
       <ApiVersionSwitcher fixedVersion="0.1.0" />
       <hr class="mt-2 mb-4 mx-2" />
-      <div class="flex-1 px-2 pb-2 flex-grow overflow-y-auto">
+      <div
+        bind:this={scrollableGuide}
+        class="flex-1 px-2 pb-2 flex-grow overflow-y-auto"
+      >
         {#if Boolean(fetchedTutorial)}
           <div class="overflow-hidden whitespace-normal break-words">
             <p class="text-subtle font-bold text-xs mb-1">TUTORIAL</p>
