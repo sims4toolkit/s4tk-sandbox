@@ -6,7 +6,7 @@
   <p class="text-xs px-1 bg-sky-300 text-sky-900 rounded max-w-min">
     {tag}
   </p>
-{:else if tag === "Node"}
+{:else if tag === "Utilities"}
   <p class="text-xs px-1 bg-emerald-300 text-emerald-900 rounded max-w-min">
     {tag}
   </p>
