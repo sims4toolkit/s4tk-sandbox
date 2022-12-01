@@ -153,7 +153,7 @@
         <div class="p-2 flex flex-col gap-2 items-center">
           <div class="flex-1 flex justify-between gap-2 w-full">
             <button
-              class="flex-1 bg-gray-300 dark:bg-gray-950 border border-solid border-transparent hover:border-gray-400 dark:hover:border-gray-600 rounded flex gap-2 py-1 justify-center items-center"
+              class="flex-1 bg-gray-300 dark:bg-gray-950 border border-solid border-transparent hover:border-gray-400 dark:hover:border-gray-600 rounded flex gap-2 py-1 justify-center items-center select-none"
               class:pointer-events-none={!canClickBack}
               class:opacity-40={!canClickBack}
               disabled={!canClickBack}
@@ -163,7 +163,7 @@
               <p class="text-sm">Back</p>
             </button>
             <button
-              class="flex-1 bg-gray-300 dark:bg-gray-950 border border-solid border-transparent hover:border-gray-400 dark:hover:border-gray-600 rounded flex gap-2 py-1 justify-center items-center"
+              class="flex-1 bg-gray-300 dark:bg-gray-950 border border-solid border-transparent hover:border-gray-400 dark:hover:border-gray-600 rounded flex gap-2 py-1 justify-center items-center  select-none"
               class:pointer-events-none={!canClickNext}
               class:opacity-40={!canClickNext}
               disabled={!canClickNext}
@@ -173,7 +173,7 @@
               <img src="./assets/chevron-right.svg" class="svg h-4" alt=">" />
             </button>
           </div>
-          <p class="text-xs text-subtle max-w-fit">
+          <p class="text-xs text-subtle max-w-fit select-none">
             Page {currentPageIndex + 1} of {fetchedTutorial.pages.length}
           </p>
         </div>
