@@ -140,7 +140,7 @@
           <hr class="my-4" />
           {#if Boolean(currentPage)}
             <div
-              class="tutorial-guide-wrapper whitespace-normal flex flex-col gap-2"
+              class="tutorial-guide-wrapper whitespace-normal flex flex-col gap-3"
             >
               {@html currentPage.guide}
             </div>
