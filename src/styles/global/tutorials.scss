@@ -22,4 +22,23 @@
     margin: 0 2px;
     display: inline-block;
   }
+
+  ol {
+    list-style-type: decimal;
+    padding-left: 2rem;
+  }
+
+  ul {
+    list-style-type: disc;
+    padding-left: 2rem;
+  }
+
+  li {
+    padding-left: 0.5rem;
+  }
+
+  .footnote {
+    color: var(--color-text-subtle);
+    font-size: 0.8rem;
+  }
 }
