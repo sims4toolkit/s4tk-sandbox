@@ -15,10 +15,17 @@
     <div class="mb-4">
       <SectionHeader title="Unlock this tutorial for $4.04" />
     </div>
-    <p class="mb-8">
-      Just kidding. The tutorial "{params.name}" doesn't exist. Please
+    <p class="mb-1">
+      Just kidding. The tutorial "{params.name}" couldn't be found. Try checking
       <a href="/tutorials" class="text-secondary" use:link
-        >browse the ones that do</a
+        >the tutorial home page</a
+      >.
+    </p>
+    <p class="mb-8">
+      If a link on that page is what led you here, please <a
+        class="text-secondary"
+        href="https://frankkmods.com/#/about"
+        target="_blank">let me know</a
       >.
     </p>
     <p class="text-subtle text-xs">Error 404</p>

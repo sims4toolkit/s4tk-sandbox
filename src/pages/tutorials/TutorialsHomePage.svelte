@@ -8,6 +8,7 @@
 
   let tutorialDatas: TutorialMetaData[];
   let tutorialsLoaded = false;
+  let loadError = false;
   let tutorialsToShow: TutorialMetaData[];
 
   let allTags: string[];
@@ -20,23 +21,27 @@
     if (tutorialsLoaded) refreshTutorialsToShow();
   }
 
-  fetchTutorialsIndex().then((index) => {
-    tutorialDatas = [];
-    tutorialsToShow = tutorialDatas;
-    allTags = index.tags;
+  fetchTutorialsIndex()
+    .then((index) => {
+      tutorialDatas = [];
+      tutorialsToShow = tutorialDatas;
+      allTags = index.tags;
 
-    for (const key in index.tutorials) {
-      tutorialDatas.push(index.tutorials[key]);
-    }
+      for (const key in index.tutorials) {
+        tutorialDatas.push(index.tutorials[key]);
+      }
 
-    tutorialDatas.sort((a, b) => {
-      if (a.recommended && !b.recommended) return -1;
-      else if (b.recommended && !a.recommended) return 1;
-      return 0;
+      tutorialDatas.sort((a, b) => {
+        if (a.recommended && !b.recommended) return -1;
+        else if (b.recommended && !a.recommended) return 1;
+        return 0;
+      });
+
+      tutorialsLoaded = true;
+    })
+    .catch((err) => {
+      loadError = true;
     });
-
-    tutorialsLoaded = true;
-  });
 
   function toggleTag(tag: string) {
     if (requiredTags.has(tag)) {
@@ -107,8 +112,17 @@
           <p class="text-subtle">No tutorials match your search terms.</p>
         {/if}
       </div>
+    {:else if loadError}
+      <p class="text-subtle mt-10">
+        An error occurred and the tutorials could not be loaded. Try refreshing
+        the page, and if the error persists, please <a
+          class="text-secondary"
+          href="https://frankkmods.com/#/about"
+          target="_blank">let me know</a
+        >.
+      </p>
     {:else}
-      <p class="text-subtle">Loading...</p>
+      <p class="text-subtle text-lg font-bold mt-10">Loading...</p>
     {/if}
   </div>
 </section>
