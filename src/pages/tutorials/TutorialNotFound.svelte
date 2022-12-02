@@ -15,7 +15,7 @@
     <div class="mb-4">
       <SectionHeader title="Unlock this tutorial for $4.04" />
     </div>
-    <p class="mb-1">
+    <p class="mb-4">
       Just kidding. The tutorial "{params.name}" couldn't be found. Try checking
       <a href="/tutorials" class="text-secondary" use:link
         >the tutorial home page</a
