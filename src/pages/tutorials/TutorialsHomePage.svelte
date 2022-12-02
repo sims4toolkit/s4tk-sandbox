@@ -113,7 +113,7 @@
         {:else}
           <p class="text-subtle">No tutorials match your search terms.</p>
         {/if}
-        <p class="text-subtle mt-4">
+        <p class="text-subtle mt-8">
           New tutorials are currently being worked on - check back later for
           more!
         </p>
