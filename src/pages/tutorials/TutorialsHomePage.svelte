@@ -103,14 +103,20 @@
         </div>
         <SearchBar bind:searchQuery />
       </div>
-      <div class="w-full tutorials-wrapper">
+      <div class="w-full">
         {#if tutorialsToShow.length > 0}
-          {#each tutorialsToShow as data, key (key)}
-            <TutorialLink {data} />
-          {/each}
+          <div class="w-full tutorials-wrapper">
+            {#each tutorialsToShow as data, key (key)}
+              <TutorialLink {data} />
+            {/each}
+          </div>
         {:else}
           <p class="text-subtle">No tutorials match your search terms.</p>
         {/if}
+        <p class="text-subtle mt-4">
+          New tutorials are currently being worked on - check back later for
+          more!
+        </p>
       </div>
     {:else if loadError}
       <p class="text-subtle mt-10">
