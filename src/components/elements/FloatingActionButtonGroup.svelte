@@ -35,7 +35,7 @@
     --toolbar-red: #c16262;
     --toolbar-pink: #c46db4;
     --toolbar-purple: #845bb5;
-    --toolbar-orange: #d3975c;
+    --toolbar-orange: #c88747;
 
     &.dark {
       --toolbar-hover-fg: white;
