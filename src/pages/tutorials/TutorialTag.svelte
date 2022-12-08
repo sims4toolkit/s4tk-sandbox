@@ -7,7 +7,7 @@
   <p class="text-xs px-1 bg-slate-300 text-slate-900 rounded max-w-min">
     {tag}
   </p>
-{:else if tag === "Sandbox"}
+{:else if tag === "Intermediate"}
   <p class="text-xs px-1 bg-sky-300 text-sky-900 rounded max-w-min">
     {tag}
   </p>

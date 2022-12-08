@@ -33,6 +33,7 @@
     --color-scrollbar-fg: #{$gray-500};
     --color-scrollbar-hover: #{$gray-400};
     --color-blur-fallback: rgba(0, 0, 0, 0.8);
+    --color-danger: #f87171;
 
     // filters
     --filter-svg: var(--filter-light);
@@ -54,6 +55,7 @@
     --color-scrollbar-fg: #{$gray-400};
     --color-scrollbar-hover: #{$gray-500};
     --color-blur-fallback: rgba(255, 255, 255, 0.8);
+    --color-danger: #dc2626;
 
     // filters
     --filter-svg: var(--filter-dark);

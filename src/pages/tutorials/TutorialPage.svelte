@@ -22,6 +22,7 @@
   let editor: EditorView;
   let scrollableGuide: HTMLDivElement;
 
+  let fetchedName: string;
   let fetchedTutorial: Tutorial;
   let tutorialMetaData: TutorialMetaData;
   let currentPageIndex = 0;
@@ -31,6 +32,11 @@
   $: tutorialName = tutorialMetaData?.name ?? "Loading...";
   $: tutorialDescription = tutorialMetaData?.description ?? "Loading...";
   $: currentPage = fetchedTutorial?.pages[currentPageIndex];
+
+  $: {
+    params.name;
+    fetchTutorialDataFromParams();
+  }
 
   onMount(() => {
     buttonData = [
@@ -57,6 +63,13 @@
       },
     ];
 
+    fetchTutorialDataFromParams();
+  });
+
+  function fetchTutorialDataFromParams() {
+    if (fetchedName === params.name) return;
+    fetchedName = params.name;
+
     fetchTutorialsIndex()
       .then((index) => {
         tutorialMetaData = index.tutorials[params.name];
@@ -76,7 +89,7 @@
         console.error(err);
         replace(`#/tutorial-not-found/${params.name}`);
       });
-  });
+  }
 
   function handleBackButtonPressed() {
     if (canClickBack) {

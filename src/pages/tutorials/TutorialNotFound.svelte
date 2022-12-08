@@ -1,9 +1,15 @@
 <script lang="ts">
-  import { link } from "svelte-spa-router";
+  import { link, replace } from "svelte-spa-router";
   import SectionHeader from "src/components/elements/SectionHeader.svelte";
   import Footer from "src/components/Footer.svelte";
 
   export let params: { name: string };
+
+  let loadedParamName = params.name;
+
+  $: {
+    if (params.name !== loadedParamName) replace(`/tutorials/${params.name}`);
+  }
 </script>
 
 <svelte:head>
