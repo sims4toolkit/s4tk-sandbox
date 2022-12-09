@@ -15,9 +15,11 @@
   --color-scrollbar-fg: #5f646d;
   --color-scrollbar-hover: #9A9EA7;
   --color-blur-fallback: rgba(0, 0, 0, 0.8);
+  --color-danger: #f87171;
   --filter-svg: var(--filter-light);
   --filter-svg-invert: var(--filter-dark);
   --filter-svg-accent: invert(69%) sepia(58%) saturate(256%) hue-rotate(114deg) brightness(95%) contrast(95%);
+  --filter-svg-gold: invert(78%) sepia(47%) saturate(513%) hue-rotate(360deg) brightness(105%) contrast(90%);
   --filter-bg-blur: blur(12px) brightness(55%);
 }
 :root:not(.dark) {
@@ -31,9 +33,11 @@
   --color-scrollbar-fg: #9A9EA7;
   --color-scrollbar-hover: #5f646d;
   --color-blur-fallback: rgba(255, 255, 255, 0.8);
+  --color-danger: #dc2626;
   --filter-svg: var(--filter-dark);
   --filter-svg-invert: var(--filter-light);
   --filter-svg-accent: invert(52%) sepia(99%) saturate(377%) hue-rotate(115deg) brightness(86%) contrast(86%);
+  --filter-svg-gold: invert(62%) sepia(85%) saturate(1249%) hue-rotate(11deg) brightness(97%) contrast(86%);
   --filter-bg-blur: blur(12px) brightness(96%);
 }
 
@@ -222,6 +226,45 @@ button.default-button:not(:disabled):hover {
 }
 button.default-button:not(:disabled):hover img {
   filter: var(--filter-svg-invert);
+}
+
+.tutorial-guide-wrapper h2 {
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+.tutorial-guide-wrapper h4 {
+  color: var(--color-text-subtle);
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 0.9rem;
+  margin-top: 1rem;
+}
+.tutorial-guide-wrapper a, .tutorial-guide-wrapper code {
+  color: var(--color-accent-secondary);
+}
+.tutorial-guide-wrapper img.inline-svg {
+  filter: var(--filter-svg);
+  height: 1.1rem;
+  margin: 0 2px;
+  display: inline-block;
+}
+.tutorial-guide-wrapper ol {
+  list-style-type: decimal;
+  padding-left: 2rem;
+}
+.tutorial-guide-wrapper ul {
+  list-style-type: disc;
+  padding-left: 2rem;
+}
+.tutorial-guide-wrapper li {
+  padding-left: 0.5rem;
+}
+.tutorial-guide-wrapper .footnote {
+  color: var(--color-text-subtle);
+  font-size: 0.8rem;
+}
+.tutorial-guide-wrapper .danger {
+  color: var(--color-danger);
 }
 
 /*# sourceMappingURL=global.css.map */
