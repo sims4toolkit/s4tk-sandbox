@@ -3,6 +3,7 @@ import Settings from "src/lib/settings";
 
 // FIXME: this should be fetched from somewhere
 export const S4TK_API_VERSIONS = [
+  "0.1.2",
   "0.1.1",
   "0.1.0"
 ];
